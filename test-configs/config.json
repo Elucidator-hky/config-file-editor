@@ -1,0 +1,65 @@
+{
+  "application": {
+    "name": "MyWebApp",
+    "version": "2.1.0",
+    "debug": false,
+    "environment": "production"
+  },
+  "server": {
+    "host": "localhost",
+    "port": 8080,
+    "ssl": {
+      "enabled": false,
+      "cert_file": "/etc/ssl/certs/app.crt",
+      "key_file": "/etc/ssl/private/app.key"
+    },
+    "cors": {
+      "enabled": true,
+      "origins": ["http://localhost:3000", "https://example.com"]
+    }
+  },
+  "database": {
+    "primary": {
+      "type": "postgresql",
+      "host": "db.example.com",
+      "port": 5432,
+      "database": "myapp",
+      "username": "appuser",
+      "password": "securepass123",
+      "ssl_mode": "require"
+    },
+    "redis": {
+      "host": "redis.example.com",
+      "port": 6379,
+      "password": "redispass",
+      "db": 0
+    }
+  },
+  "logging": {
+    "level": "warn",
+    "output": "file",
+    "file": {
+      "path": "/var/log/myapp.log",
+      "max_size": "50MB",
+      "rotate": true
+    }
+  },
+  "features": {
+    "user_registration": true,
+    "email_verification": true,
+    "two_factor_auth": false,
+    "api_rate_limiting": true
+  },
+  "external_services": {
+    "payment": {
+      "provider": "stripe",
+      "api_key": "sk_test_...",
+      "webhook_secret": "whsec_..."
+    },
+    "email": {
+      "provider": "sendgrid",
+      "api_key": "SG.xxxxx",
+      "from_email": "noreply@myapp.com"
+    }
+  }
+} 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 应用程序设置 -->
+    <application>
+        <name>Enterprise App</name>
+        <version>3.0.1</version>
+        <debug>false</debug>
+        <maintenance_mode>false</maintenance_mode>
+    </application>
+
+    <!-- 服务器配置 -->
+    <server host="0.0.0.0" port="8080">
+        <ssl enabled="false">
+            <certificate>/etc/ssl/server.crt</certificate>
+            <private_key>/etc/ssl/server.key</private_key>
+        </ssl>
+        <performance>
+            <max_connections>2000</max_connections>
+            <timeout>45</timeout>
+            <keep_alive>true</keep_alive>
+        </performance>
+    </server>
+
+    <!-- 数据库配置 -->
+    <database>
+        <primary type="mysql">
+            <host>127.0.0.1</host>
+            <port>3306</port>
+            <schema>enterprise_db</schema>
+            <username>dbadmin</username>
+            <password>mysql_password_123</password>
+            <pool_size>20</pool_size>
+        </primary>
+        <cache type="redis">
+            <host>redis.internal.com</host>
+            <port>6379</port>
+            <password>redis_secret</password>
+            <ttl>7200</ttl>
+        </cache>
+    </database>
+
+    <!-- 日志配置 -->
+    <logging>
+        <level>error</level>
+        <appenders>
+            <file>
+                <path>/var/log/enterprise.log</path>
+                <max_size>100MB</max_size>
+                <backup_count>10</backup_count>
+            </file>
+            <console enabled="false"/>
+        </appenders>
+    </logging>
+
+    <!-- 安全设置 -->
+    <security>
+        <encryption>
+            <algorithm>AES-256</algorithm>
+            <key>enterprise_encryption_key_2023</key>
+        </encryption>
+        <authentication>
+            <session_timeout>1800</session_timeout>
+            <max_attempts>3</max_attempts>
+            <lockout_duration>900</lockout_duration>
+        </authentication>
+    </security>
+
+    <!-- 外部服务 -->
+    <external_services>
+        <payment_gateway>
+            <provider>paypal</provider>
+            <sandbox>false</sandbox>
+            <client_id>paypal_client_id_here</client_id>
+            <client_secret>paypal_secret_here</client_secret>
+        </payment_gateway>
+        <notification>
+            <email_service>aws_ses</email_service>
+            <sms_service>twilio</sms_service>
+            <api_key>notification_api_key</api_key>
+        </notification>
+    </external_services>
+</configuration> 

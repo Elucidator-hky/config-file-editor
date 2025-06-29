@@ -1,0 +1,27 @@
+{
+  "id": "82804c14-83d4-44cb-aee2-37b6fb65bd0e",
+  "name": "为人情味去",
+  "description": "sadfasd",
+  "items": [
+    {
+      "id": "item-1751170453183",
+      "name": "adsfasd",
+      "description": "",
+      "defaultValue": "",
+      "targets": [
+        {
+          "id": "target-1751170517572-0.4662630197621632",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 2,
+          "prefix": "name ="
+        },
+        {
+          "id": "target-1751170517572-0.06633108835543922",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 17,
+          "prefix": "name ="
+        }
+      ]
+    }
+  ]
+}

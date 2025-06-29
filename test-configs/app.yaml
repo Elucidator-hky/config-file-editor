@@ -1,0 +1,104 @@
+# 应用配置文件 (YAML格式)
+app:
+  name: "Modern Web Service"
+  version: "4.2.0"
+  environment: production
+  debug: false
+  timezone: "UTC"
+
+# 服务器设置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  workers: 8
+  ssl:
+    enabled: false
+    cert_path: "/etc/certs/app.crt"
+    key_path: "/etc/certs/app.key"
+  cors:
+    enabled: true
+    origins:
+      - "https://app.example.com"
+      - "https://admin.example.com"
+
+# 数据库配置
+database:
+  primary:
+    driver: "postgresql"
+host:127.0.0.1
+    port: 5432
+    name: "modern_app"
+    username: "app_user"
+    password: "pg_secure_password"
+    ssl_mode: "require"
+    max_connections: 25
+  
+  redis:
+    host: "redis.cluster.local"
+    port: 6379
+    password: "redis_cluster_password"
+    database: 1
+    timeout: 10s
+
+# 日志配置
+logging:
+  level: "info"
+  format: "json"
+  outputs:
+    - type: "file"
+      path: "/app/logs/service.log"
+      max_size: "200MB"
+      compress: true
+    - type: "stdout"
+      enabled: true
+
+# 缓存设置
+cache:
+  default_ttl: 3600
+  max_memory: "512MB"
+  eviction_policy: "lru"
+
+# 消息队列
+message_queue:
+  provider: "rabbitmq"
+  host: "rabbitmq.cluster.local"
+  port: 5672
+  username: "queue_user"
+  password: "rabbit_password"
+  vhost: "/app"
+
+# 监控和指标
+monitoring:
+  metrics:
+    enabled: true
+    endpoint: "/metrics"
+  health_check:
+    endpoint: "/health"
+    timeout: 5s
+  jaeger:
+    endpoint: "http://jaeger:14268/api/traces"
+    service_name: "modern-web-service"
+
+# 外部API
+external_apis:
+  payment_service:
+    base_url: "https://api.stripe.com"
+    api_key: "sk_live_payment_key"
+    timeout: 30s
+  
+  notification_service:
+    base_url: "https://api.sendgrid.com"
+    api_key: "SG.notification_api_key"
+    from_email: "noreply@example.com"
+
+# 安全配置
+security:
+  jwt:
+    secret_key: "jwt_super_secret_key_2023"
+    expiry: 86400  # 24 hours
+  rate_limiting:
+    requests_per_minute: 100
+    burst_size: 20
+  encryption:
+    algorithm: "AES-256-GCM"
+    key: "encryption_master_key" 
