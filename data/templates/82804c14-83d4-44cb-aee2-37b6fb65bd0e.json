@@ -1,27 +1,50 @@
 {
   "id": "82804c14-83d4-44cb-aee2-37b6fb65bd0e",
-  "name": "为人情味去",
-  "description": "sadfasd",
+  "name": "dfm",
+  "description": "",
   "items": [
     {
-      "id": "item-1751170453183",
-      "name": "adsfasd",
+      "id": "item-1751198147146",
+      "name": "数据库IP",
       "description": "",
-      "defaultValue": "",
+      "defaultValue": "127.0.0.1",
       "targets": [
         {
-          "id": "target-1751170517572-0.4662630197621632",
+          "id": "target-1751198174667-0.39539065594993683",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 8,
+          "prefix": "DatabaseHost ="
+        },
+        {
+          "id": "target-1751198365275-0.21554870729233044",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 27,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        }
+      ],
+      "currentValue": "127.0.0.1"
+    },
+    {
+      "id": "item-1751198475084",
+      "name": "数据库名称",
+      "description": "",
+      "defaultValue": "DBtest",
+      "targets": [
+        {
+          "id": "target-1751198501887-0.2287780707345437",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 10,
+          "prefix": "DatabaseName ="
+        },
+        {
+          "id": "target-1751202397213-0.6813484592619306",
           "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
           "lineNumber": 2,
           "prefix": "name ="
-        },
-        {
-          "id": "target-1751170517572-0.06633108835543922",
-          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
-          "lineNumber": 17,
-          "prefix": "name ="
         }
-      ]
+      ],
+      "currentValue": "DBtest"
     }
   ]
 }

@@ -43,13 +43,8 @@ func (tm *TemplateManager) GetAll() ([]Template, error) {
 			return err
 		}
 
-		// 只返回基本信息，不包含详细配置项
-		templates = append(templates, Template{
-			ID:          template.ID,
-			Name:        template.Name,
-			Description: template.Description,
-			Items:       []ConfigItem{}, // 返回空数组而不是nil
-		})
+		// 返回完整的模板信息，包含配置项
+		templates = append(templates, *template)
 
 		return nil
 	})

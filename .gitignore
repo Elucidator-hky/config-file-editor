@@ -1,0 +1,42 @@
+# 编译文件
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Go 临时文件
+*.test
+*.out
+*.prof
+
+# Go vendor目录
+vendor/
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+
+# Go下载的安装包
+*.msi
+
+# 生成的数据文件（可选，根据需要调整）
+# data/templates/*.json 
