@@ -1,0 +1,2706 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置文件修改工具</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* 页面标题 */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        /* 主容器 */
+        .container {
+            display: flex;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 320px;
+            background: white;
+            border: 1px solid #e9ecef;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            margin: 0 0 20px 0;
+            color: #495057;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            background: white;
+            border: 1px solid #e9ecef;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        /* 模态框样式 - 关键部分 */
+        .modal {
+            display: none !important;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal.show {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 32px;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e9ecef;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .modal-actions {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        .modal-footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        .modal-footer .btn {
+            margin-left: 8px;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            color: #6c757d;
+            padding: 80px 20px;
+        }
+
+        .empty-state h3 {
+            color: #495057;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* 模板项 */
+        .template-item {
+            padding: 16px;
+            margin: 8px 0;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: #fafbfc;
+        }
+
+        .template-item:hover {
+            background-color: #f1f3f4;
+            border-color: #007bff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,123,255,0.15);
+        }
+
+        .template-item.active {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+            box-shadow: 0 2px 12px rgba(33, 150, 243, 0.25);
+        }
+
+        .template-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .template-desc {
+            font-size: 13px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        /* 模板操作按钮 */
+        .template-actions {
+            margin-top: 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .template-item:hover .template-actions {
+            opacity: 1;
+        }
+
+        .template-actions .btn {
+            padding: 4px 8px;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* 配置项 */
+        .config-item {
+            margin: 24px 0;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background-color: #fafbfc;
+        }
+
+        .config-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 15px;
+        }
+
+        .config-item input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            margin: 8px 0;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .config-item input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+        .current-value {
+            color: #6c757d;
+            font-style: italic;
+            margin: 8px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-size: 13px;
+            border-left: 3px solid #6c757d;
+        }
+
+        /* 配置项状态样式 */
+        .config-item.status-ok {
+            border-left: 4px solid #28a745;
+            background-color: #f8fff9;
+        }
+
+        .config-item.status-warning {
+            border-left: 4px solid #ffc107;
+            background-color: #fffef8;
+        }
+
+        .config-item.status-error {
+            border-left: 4px solid #dc3545;
+            background-color: #fff8f8;
+        }
+
+        .config-item.status-unknown {
+            border-left: 4px solid #6c757d;
+            background-color: #f8f9fa;
+        }
+
+        .config-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .config-item-header label {
+            margin: 0;
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-icon {
+            font-size: 16px;
+            cursor: help;
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .config-item.status-ok .status-text {
+            color: #28a745;
+        }
+
+        .config-item.status-warning .status-text {
+            color: #e68900;
+        }
+
+        .config-item.status-error .status-text {
+            color: #dc3545;
+        }
+
+        .current-value-text {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .config-item.status-error .current-value-text {
+            color: #dc3545;
+            font-style: italic;
+        }
+
+        /* 模板头部 */
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .template-info h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .template-info p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-large {
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        /* 配置项列表 */
+        .config-items-list {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .config-item-row {
+            padding: 16px;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .config-item-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .config-item-row.selected {
+            background-color: #e3f2fd;
+            border-left: 3px solid #2196f3;
+        }
+
+        .config-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .config-item-info {
+            flex: 1;
+        }
+
+        .config-item-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2c3e50;
+        }
+
+        .config-item-desc {
+            font-size: 12px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .config-item-meta {
+            font-size: 11px;
+            color: #adb5bd;
+            margin-top: 4px;
+        }
+
+        .config-item-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* 模板操作区域 */
+        .template-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 8px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .delete-template-btn {
+            background-color: #dc3545 !important;
+            color: white !important;
+            border: none !important;
+            padding: 4px 8px !important;
+            font-size: 11px !important;
+            border-radius: 3px !important;
+            cursor: pointer !important;
+            transition: background-color 0.2s !important;
+            position: relative !important;
+            z-index: 11 !important;
+            pointer-events: auto !important;
+        }
+
+        .delete-template-btn:hover {
+            background-color: #c82333 !important;
+        }
+
+        .delete-template-btn span {
+            pointer-events: none;
+        }
+
+        /* 搜索输入框 */
+        .search-inputs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .search-inputs input {
+            flex: 1;
+        }
+
+        /* 消息横幅 */
+        .success-banner, .error-banner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .success-banner {
+            background-color: #28a745;
+        }
+
+        .error-banner {
+            background-color: #dc3545;
+        }
+
+        /* 调试面板样式 */
+        .debug-panel {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            width: 300px;
+            max-height: 200px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        /* 加载遮罩样式 */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        .loading-text {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 目标点详情样式 */
+        .btn-expand {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 8px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-expand:hover {
+            background-color: #e9ecef;
+        }
+
+        .targets-detail {
+            margin-top: 12px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+
+        .targets-header h4 {
+            margin: 0 0 12px 0;
+            color: #495057;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .targets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .target-item {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            background-color: white;
+        }
+
+        .target-success {
+            border-left: 3px solid #28a745;
+        }
+
+        .target-error {
+            border-left: 3px solid #dc3545;
+        }
+
+        .target-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .target-status {
+            font-size: 12px;
+        }
+
+        .target-file {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            color: #6f42c1;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .target-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 12px;
+        }
+
+        .target-details > div {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .target-details strong {
+            min-width: 60px;
+            color: #495057;
+        }
+
+        .target-details code {
+            background-color: #e9ecef;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 11px;
+        }
+
+        .target-pattern {
+            align-items: center !important;
+        }
+
+        .target-current-value code {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 页面标题 -->
+    <div class="header">
+        <h1>配置文件修改工具</h1>
+        <p>轻松管理和修改配置文件的模板化工具</p>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 左侧模板列表 -->
+        <div class="sidebar">
+            <h3>模板列表</h3>
+            <button class="btn btn-primary" id="createTemplateBtn">
+                新建模板
+            </button>
+            <button class="btn btn-success" id="generateDfmTemplateBtn">
+                生成DFM配置模板
+            </button>
+            <div id="templateList"></div>
+        </div>
+        
+        <!-- 右侧工作区 -->
+        <div class="main-content">
+            <div id="workspace">
+                <div class="empty-state">
+                    <h3>欢迎使用配置文件修改工具</h3>
+                    <p>请在左侧选择一个模板开始配置，或创建新模板</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模板编辑模态框 -->
+    <div id="templateEditorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">模板编辑器</div>
+            
+            <!-- 模板基本信息 -->
+            <div class="form-group">
+                <label>模板名称</label>
+                <input type="text" id="templateName" placeholder="如：生产环境配置">
+                <small>请输入有意义的模板名称</small>
+            </div>
+            <div class="form-group">
+                <label>模板描述</label>
+                <textarea id="templateDescription" placeholder="描述这个模板的用途和适用场景（可选）"></textarea>
+            </div>
+            
+            <!-- 配置项列表 -->
+            <div class="form-group">
+                <label>配置项列表</label>
+                <button class="btn btn-primary" onclick="showAddConfigItemForm()">
+                    添加配置项
+                </button>
+                <div id="configItemsList" class="config-items-list"></div>
+            </div>
+            
+            <!-- 目标点列表 -->
+            <div id="targetsSection" style="display: none;">
+                <div class="form-group">
+                    <label>目标点列表</label>
+                    <p style="font-size: 13px; color: #6c757d; margin: 8px 0;">为当前配置项关联需要修改的文件位置</p>
+                    <button class="btn btn-primary btn-small" onclick="addTarget()">
+                        添加目标点
+                    </button>
+                    <div id="targetsList" class="targets-list"></div>
+                </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeTemplateEditor()">取消</button>
+                <button class="btn btn-success" onclick="saveTemplate()">
+                    保存模板
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加配置项模态框 -->
+    <div id="addConfigItemModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">添加配置项</div>
+            
+            <div class="form-group">
+                <label>配置项名称 *</label>
+                <input type="text" id="newConfigItemName" placeholder="如：数据库地址、日志级别">
+                <small>请输入配置项的名称</small>
+            </div>
+            
+            <div class="form-group">
+                <label>配置项描述</label>
+                <textarea id="newConfigItemDescription" placeholder="描述这个配置项的作用（可选）"></textarea>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeAddConfigItemForm()">取消</button>
+                <button class="btn btn-success" onclick="confirmAddConfigItem()">
+                    确认添加
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件搜索模态框 -->
+    <div id="fileSearchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">添加目标点</div>
+            
+            <!-- 文件选择 -->
+            <div class="form-group">
+                <label>目标文件</label>
+                <input type="text" id="targetFilePath" 
+                       placeholder="输入完整文件路径，如：E:\code\editPath\test-configs\server.conf">
+                <small>请输入要修改的配置文件的完整路径</small>
+            </div>
+            
+            <!-- 搜索条件 -->
+            <div class="form-group">
+                <label>搜索条件</label>
+                <div class="search-inputs">
+                    <input type="text" id="searchPrefix" placeholder="前缀（必填），如：host = ">
+                    <input type="text" id="searchSuffix" placeholder="后缀（可选），如：</host>">
+                </div>
+                <small>前缀是必填的，用于定位需要修改的行；后缀可选，用于更精确的匹配</small>
+                <button class="btn btn-primary" onclick="findMatches()" style="margin-top: 12px;">
+                    查找匹配项
+                </button>
+            </div>
+            
+            <!-- 匹配结果 -->
+            <div id="matchResultsSection" style="display: none;">
+                <div class="form-group">
+                    <label>匹配结果</label>
+                    <p style="font-size: 13px; color: #6c757d;">请勾选需要由此配置项管理的行</p>
+                    <div id="matchResults" class="match-results"></div>
+                </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeFileSearch()">取消</button>
+                <button class="btn btn-success" onclick="confirmSelection()" style="display: none;" id="confirmSelectionBtn">
+                    确认选择
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自定义确认对话框 -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">确认操作</div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfirmDialog(false)">取消</button>
+                <button class="btn btn-danger" onclick="closeConfirmDialog(true)">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// 调试：确保JavaScript已加载
+console.log('app.js 开始加载...');
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM加载完成');
+    
+    // 绑定新建模板按钮事件
+    const createBtn = document.getElementById('createTemplateBtn');
+    if (createBtn) {
+        console.log('找到新建模板按钮，绑定点击事件');
+        createBtn.addEventListener('click', function() {
+            console.log('新建模板按钮被点击！');
+            createTemplate();
+        });
+    } else {
+        console.error('没有找到新建模板按钮！');
+    }
+    
+    // 绑定生成DFM配置模板按钮事件
+    const generateDfmBtn = document.getElementById('generateDfmTemplateBtn');
+    if (generateDfmBtn) {
+        console.log('找到生成DFM配置模板按钮，绑定点击事件');
+        generateDfmBtn.addEventListener('click', function() {
+            console.log('生成DFM配置模板按钮被点击！');
+            generateDfmTemplate();
+        });
+    } else {
+        console.error('没有找到生成DFM配置模板按钮！');
+    }
+    
+    // 添加键盘事件监听器，F12键开关调试面板
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12') {
+            e.preventDefault();
+            toggleDebugPanel();
+        }
+    });
+    
+    // 等待Java Bridge初始化，而不是立即初始化
+    console.log('等待Java Bridge初始化...');
+    waitForJavaBridge();
+});
+
+// 开关调试面板
+function toggleDebugPanel() {
+    const panel = document.getElementById('performancePanel');
+    if (panel) {
+        const isVisible = panel.style.display !== 'none';
+        panel.style.display = isVisible ? 'none' : 'block';
+        debugLog(`调试面板已${isVisible ? '隐藏' : '显示'}`);
+    }
+}
+
+// 等待Java Bridge初始化
+function waitForJavaBridge() {
+    let attempts = 0;
+    const maxAttempts = 50; // 最多等待5秒
+    
+    const checkBridge = () => {
+        attempts++;
+        console.log(`检查Java Bridge，尝试次数: ${attempts}`);
+        
+        if (typeof window.javaApp !== 'undefined') {
+            console.log('Java Bridge已就绪，开始初始化应用...');
+            initApp();
+        } else if (attempts < maxAttempts) {
+            console.log('Java Bridge未就绪，100ms后重试...');
+            setTimeout(checkBridge, 100);
+        } else {
+            console.error('Java Bridge初始化超时！');
+            showError('应用初始化失败，请重启程序');
+        }
+    };
+    
+    checkBridge();
+}
+
+// 自定义确认对话框相关变量
+let confirmCallback = null;
+
+// 自定义确认对话框函数
+function customConfirm(message) {
+    return new Promise((resolve) => {
+        console.log('显示自定义确认对话框:', message);
+        
+        // 设置消息
+        document.getElementById('confirmMessage').textContent = message;
+        
+        // 设置回调
+        confirmCallback = resolve;
+        
+        // 显示模态框
+        document.getElementById('confirmModal').classList.add('show');
+    });
+}
+
+// 关闭确认对话框
+function closeConfirmDialog(result) {
+    console.log('确认对话框结果:', result);
+    
+    // 隐藏模态框
+    document.getElementById('confirmModal').classList.remove('show');
+    
+    // 调用回调
+    if (confirmCallback) {
+        confirmCallback(result);
+        confirmCallback = null;
+    }
+}
+
+// 检查window.javaApp是否可用
+window.addEventListener('load', function() {
+    console.log('页面加载完成');
+    console.log('window.javaApp 是否存在:', typeof window.javaApp);
+    
+    if (typeof window.javaApp === 'undefined') {
+        console.error('JavaScript Bridge未正确初始化！');
+    } else {
+        console.log('JavaScript Bridge正常工作');
+    }
+});
+
+// 初始化应用函数
+async function initApp() {
+    console.log('应用开始初始化...');
+    
+    try {
+        await loadTemplates();
+        console.log('应用初始化完成');
+    } catch (error) {
+        console.error('应用初始化失败:', error);
+        showError('应用初始化失败: ' + error.message);
+    }
+}
+
+// 全局变量
+let templates = [];
+let currentTemplate = null;
+let currentTemplateWithStatus = null;
+let editingTemplate = null;
+let selectedConfigItem = null;
+let currentMatches = [];
+let isLoading = false;
+let debugMode = false;
+
+
+// 调试函数（简化版）
+function debugLog(message, id = '') {
+    console.log(message);
+}
+
+function debugLogEnd(id, extra = '') {
+    // 简化版本，不做具体实现
+}
+
+// 创建调试控制面板
+function createDebugPanel() {
+    if (!debugMode) return;
+    
+    const debugPanel = document.createElement('div');
+    debugPanel.id = 'performancePanel';
+    debugPanel.style.cssText = `
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        width: 350px;
+        max-height: 300px;
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        font-family: monospace;
+        font-size: 11px;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-y: auto;
+        z-index: 10000;
+        border: 1px solid #444;
+    `;
+    
+    debugPanel.innerHTML = `
+        <div style="border-bottom: 1px solid #444; padding-bottom: 5px; margin-bottom: 5px;">
+            <strong>性能监控面板</strong>
+            <button onclick="clearDebugLogs()" style="float: right; font-size: 10px; background: #444; color: white; border: none; padding: 2px 5px; border-radius: 3px; margin-left: 5px;">清空</button>
+            <button onclick="startStressTest()" style="float: right; font-size: 10px; background: #d32f2f; color: white; border: none; padding: 2px 5px; border-radius: 3px;">压力测试</button>
+        </div>
+        <div id="debugLogs"></div>
+    `;
+    
+    document.body.appendChild(debugPanel);
+    
+    // 自动监控加载状态变化
+    let lastLoadingState = isLoading;
+    setInterval(() => {
+        if (lastLoadingState !== isLoading) {
+            debugLog(`加载状态变化: ${lastLoadingState} -> ${isLoading}`);
+            lastLoadingState = isLoading;
+        }
+    }, 100);
+}
+
+// 压力测试功能
+let stressTestRunning = false;
+
+async function startStressTest() {
+    if (stressTestRunning) {
+        debugLog('压力测试: 停止测试');
+        stressTestRunning = false;
+        return;
+    }
+    
+    if (templates.length === 0) {
+        debugLog('压力测试: 没有可用模板');
+        showError('没有可用模板进行测试');
+        return;
+    }
+    
+    stressTestRunning = true;
+    debugLog('压力测试: 开始测试 - 快速切换模板', 'stressTest');
+    
+    let testCount = 0;
+    const maxTests = 10;
+    
+    for (let i = 0; i < maxTests && stressTestRunning; i++) {
+        const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
+        debugLog(`压力测试: 第${i + 1}/${maxTests}次 - 选择模板 "${randomTemplate.name}"`);
+        
+        const testStart = performance.now();
+        await selectTemplate(randomTemplate.id);
+        const testEnd = performance.now();
+        
+        debugLog(`压力测试: 第${i + 1}次完成，耗时: ${(testEnd - testStart).toFixed(2)}ms`);
+        testCount++;
+        
+        // 等待500ms再进行下一次测试
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    
+    stressTestRunning = false;
+    debugLogEnd('stressTest', `完成${testCount}次测试`);
+    debugLog('压力测试: 测试完成');
+}
+
+// 清空调试日志
+function clearDebugLogs() {
+    const debugLogs = document.getElementById('debugLogs');
+    if (debugLogs) {
+        debugLogs.innerHTML = '';
+    }
+}
+
+// 添加日志到调试面板
+function addToDebugPanel(message) {
+    if (!debugMode) return;
+    
+    const debugLogs = document.getElementById('debugLogs');
+    if (debugLogs) {
+        const logDiv = document.createElement('div');
+        logDiv.textContent = message;
+        logDiv.style.marginBottom = '2px';
+        debugLogs.appendChild(logDiv);
+        
+        // 保持最新日志可见
+        debugLogs.scrollTop = debugLogs.scrollHeight;
+        
+        // 限制日志数量，避免内存泄漏
+        const logs = debugLogs.children;
+        if (logs.length > 100) {
+            debugLogs.removeChild(logs[0]);
+        }
+    }
+}
+
+// 显示加载状态
+function showLoading(message = '加载中...') {
+    if (isLoading) return; // 防止重复显示
+    
+    isLoading = true;
+    
+    // 创建加载遮罩
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'loadingOverlay';
+    loadingOverlay.innerHTML = `
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">${message}</div>
+        </div>
+    `;
+    document.body.appendChild(loadingOverlay);
+    
+    // 禁用所有按钮和输入
+    disableAllInteractions();
+}
+
+// 隐藏加载状态
+function hideLoading() {
+    if (!isLoading) return;
+    
+    isLoading = false;
+    
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.remove();
+    }
+    
+    // 恢复所有交互
+    enableAllInteractions();
+}
+
+// 禁用所有交互
+function disableAllInteractions() {
+    const buttons = document.querySelectorAll('button');
+    const inputs = document.querySelectorAll('input, textarea, select');
+    const clickableElements = document.querySelectorAll('.template-item, .config-item-info');
+    
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.pointerEvents = 'none';
+    });
+    
+    inputs.forEach(input => {
+        input.disabled = true;
+    });
+    
+    clickableElements.forEach(element => {
+        element.style.pointerEvents = 'none';
+    });
+}
+
+// 恢复所有交互
+function enableAllInteractions() {
+    const buttons = document.querySelectorAll('button');
+    const inputs = document.querySelectorAll('input, textarea, select');
+    const clickableElements = document.querySelectorAll('.template-item, .config-item-info');
+    
+    buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.style.pointerEvents = 'auto';
+    });
+    
+    inputs.forEach(input => {
+        input.disabled = false;
+    });
+    
+    clickableElements.forEach(element => {
+        element.style.pointerEvents = 'auto';
+    });
+}
+
+// 工具函数：清理文件路径，移除不可见字符
+function cleanFilePath(path) {
+    if (!path) return '';
+    
+    let cleaned = path.replace(/[\u200B-\u200D\uFEFF\u202A-\u202E]/g, '');
+    cleaned = cleaned.trim();
+    cleaned = cleaned.replace(/\//g, '\\');
+    
+    return cleaned;
+}
+
+// 显示成功消息
+function showSuccess(message) {
+    const banner = document.createElement('div');
+    banner.className = 'success-banner';
+    banner.innerHTML = message;
+    document.body.insertBefore(banner, document.body.firstChild);
+    setTimeout(() => banner.remove(), 3000);
+}
+
+// 显示错误消息
+function showError(message) {
+    const banner = document.createElement('div');
+    banner.className = 'error-banner';
+    banner.innerHTML = message;
+    document.body.insertBefore(banner, document.body.firstChild);
+    setTimeout(() => banner.remove(), 5000);
+}
+
+// 加载模板列表 - 使用Java Bridge调用
+let isLoadingTemplates = false;
+async function loadTemplates(forceReload = false) {
+    console.log('加载模板列表...');
+    
+    if (!forceReload && templates.length > 0) {
+        renderTemplateList();
+        return;
+    }
+    
+    try {
+        const resultJSON = await window.javaApp.getTemplatesList();
+        const result = JSON.parse(resultJSON);
+        
+        if (!result.success) {
+            showError('加载模板失败: ' + result.error);
+            return;
+        }
+        
+        templates = result.data || [];
+        console.log('模板加载完成，数量:', templates.length);
+        renderTemplateList();
+    } catch (error) {
+        console.error('加载模板失败:', error);
+        showError('加载模板失败: ' + error.message);
+    }
+}
+
+// 渲染模板列表
+function renderTemplateList() {
+    const container = document.getElementById('templateList');
+    container.innerHTML = '';
+    
+    if (templates.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #6c757d; margin-top: 20px; font-size: 14px;">暂无模板，点击上方按钮创建</p>';
+        return;
+    }
+    
+    templates.forEach((template) => {
+        const div = document.createElement('div');
+        div.className = 'template-item';
+        if (currentTemplate && currentTemplate.id === template.id) {
+            div.classList.add('active');
+        }
+        
+        let descHtml = '';
+        if (template.description && template.description.trim()) {
+            descHtml = `<div class="template-desc">${template.description}</div>`;
+        }
+        
+        div.innerHTML = `
+            <div class="template-name">${template.name}</div>
+            ${descHtml}
+            <div class="template-actions">
+                <button class="btn btn-danger btn-small delete-template-btn" data-template-id="${template.id}" title="删除模板">
+                    <span>删除</span>
+                </button>
+            </div>
+        `;
+        
+        // 统一的点击事件处理
+        div.addEventListener('click', (e) => {
+            // 检查是否点击了删除按钮
+            if (e.target.closest('.delete-template-btn')) {
+                deleteTemplate(template.id);
+            } else {
+                // 点击其他区域，切换模板
+                selectTemplate(template.id);
+            }
+        });
+        
+        container.appendChild(div);
+    });
+}
+
+// 删除模板
+async function deleteTemplate(templateId) {
+    console.log('删除模板:', templateId);
+    
+    const template = templates.find(t => t.id === templateId);
+    if (!template) {
+        showError('模板不存在');
+        return;
+    }
+    
+    // 使用自定义确认对话框
+    const confirmed = await customConfirm(`确定要删除模板"${template.name}"吗？\n此操作不可撤销！`);
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    try {
+        const resultJSON = await window.javaApp.deleteTemplate(templateId);
+        const result = JSON.parse(resultJSON);
+        
+        if (result.success) {
+            // 从数组中移除模板
+            const index = templates.findIndex(t => t.id === templateId);
+            if (index !== -1) {
+                templates.splice(index, 1);
+            }
+            
+            // 如果删除的是当前选中的模板，清空选择
+            if (currentTemplate && currentTemplate.id === templateId) {
+                currentTemplate = null;
+                renderWorkspace();
+            }
+            
+            // 重新渲染模板列表
+            renderTemplateList();
+            showSuccess('模板删除成功');
+            
+        } else {
+            showError('删除模板失败: ' + result.error);
+        }
+    } catch (error) {
+        console.error('删除模板失败:', error);
+        showError('删除模板失败: ' + error.message);
+    }
+}
+
+// 选择模板
+async function selectTemplate(templateId) {
+    console.log('选择模板:', templateId);
+    
+    try {
+        // 查找模板
+        const template = templates.find(t => t.id === templateId);
+        if (!template) {
+            showError('模板不存在');
+            return;
+        }
+        
+        console.log('找到模板:', template.name);
+        
+        // 获取模板详情和状态信息
+        showLoading('检查配置状态...');
+        const resultJSON = await window.javaApp.getTemplateDetailWithStatus(templateId);
+        const response = JSON.parse(resultJSON);
+        
+        hideLoading();
+        
+        if (!response.success) {
+            showError('获取模板详情失败: ' + response.error);
+            return;
+        }
+        
+        currentTemplateWithStatus = response.data;
+        currentTemplate = currentTemplateWithStatus.template;
+        
+        console.log('模板加载成功，配置项数量:', currentTemplate.items.length);
+        
+        // 更新选中状态
+        updateTemplateSelection(templateId);
+        
+        // 渲染工作区
+        renderWorkspace();
+        
+    } catch (error) {
+        console.error('选择模板失败:', error);
+        hideLoading();
+        showError('选择模板失败: ' + error.message);
+    }
+}
+
+// 只更新模板选中状态，不重新渲染整个列表
+function updateTemplateSelection(templateId) {
+    const container = document.getElementById('templateList');
+    const templateItems = container.querySelectorAll('.template-item');
+    
+    templateItems.forEach(item => {
+        item.classList.remove('active');
+        const deleteBtn = item.querySelector('.delete-template-btn');
+        if (deleteBtn && currentTemplate && deleteBtn.dataset.templateId === templateId) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// 渲染工作区
+function renderWorkspace() {
+    const workspace = document.getElementById('workspace');
+    
+    if (!currentTemplate) {
+        workspace.innerHTML = `
+            <div class="empty-state">
+                <h3>欢迎使用配置文件修改工具</h3>
+                <p>请在左侧选择一个模板开始配置，或创建新模板</p>
+            </div>
+        `;
+        return;
+    }
+
+    let descHtml = '';
+    if (currentTemplate.description && currentTemplate.description.trim()) {
+        descHtml = `<p>${currentTemplate.description}</p>`;
+    }
+
+    let html = `
+        <div class="template-header">
+            <div class="template-info">
+                <h2>${currentTemplate.name}</h2>
+                ${descHtml}
+            </div>
+            <button class="btn btn-primary" onclick="editTemplate('${currentTemplate.id}')">
+                编辑模板
+            </button>
+        </div>
+    `;
+
+    if (currentTemplate.items && currentTemplate.items.length > 0) {
+        currentTemplate.items.forEach((item, index) => {
+            // 获取配置项状态
+            const status = currentTemplateWithStatus && currentTemplateWithStatus.itemStatuses 
+                ? currentTemplateWithStatus.itemStatuses[item.name] 
+                : null;
+            
+            // 状态图标和样式
+            let statusIcon = '';
+            let statusClass = '';
+            let currentValue = '';
+            let statusMessage = '';
+            
+            if (status) {
+                switch (status.status) {
+                    case 'OK':
+                        statusIcon = '✅';
+                        statusClass = 'status-ok';
+                        currentValue = status.currentValue || '';
+                        statusMessage = '配置正常';
+                        break;
+                    case 'WARNING':
+                        statusIcon = '⚠️';
+                        statusClass = 'status-warning';
+                        currentValue = status.currentValue || '';
+                        statusMessage = status.message;
+                        break;
+                    case 'ERROR':
+                        statusIcon = '●';
+                        statusClass = 'status-error';
+                        currentValue = '';
+                        statusMessage = status.message;
+                        break;
+                    default:
+                        statusIcon = '❓';
+                        statusClass = 'status-unknown';
+                        statusMessage = '状态未知';
+                }
+            } else {
+                statusIcon = '❓';
+                statusClass = 'status-unknown';
+                statusMessage = '未检查';
+            }
+
+            // 生成目标点详情HTML
+            let targetsDetailHtml = '';
+            if (status && status.targetStatuses && status.targetStatuses.length > 0) {
+                targetsDetailHtml = `
+                    <div class="targets-detail" id="targets-detail-${index}" style="display: none;">
+                        <div class="targets-header">
+                            <h4>目标点详情 (${status.targetStatuses.length}个)</h4>
+                        </div>
+                        <div class="targets-list">
+                `;
+                
+                status.targetStatuses.forEach((target, targetIndex) => {
+                    const targetStatusIcon = target.status === 'SUCCESS' ? '✅' : '●';
+                    const targetStatusClass = target.status === 'SUCCESS' ? 'target-success' : 'target-error';
+                    
+                    targetsDetailHtml += `
+                        <div class="target-item ${targetStatusClass}">
+                            <div class="target-header">
+                                <span class="target-status">${targetStatusIcon}</span>
+                                <span class="target-file">${target.filePath}</span>
+                            </div>
+                            <div class="target-details">
+                                <div class="target-location">
+                                    <strong>位置:</strong> 第${target.lineNumber}行
+                                </div>
+                                <div class="target-pattern">
+                                    <strong>匹配项:</strong> 
+                                    <code>${target.prefix || '(无前缀)'}</code>
+                                    <span style="color: #007bff;">[值]</span>
+                                    <code>${target.suffix || '(无后缀)'}</code>
+                                </div>
+                                <div class="target-status-msg">
+                                    <strong>状态:</strong> ${target.message}
+                                </div>
+                                ${target.currentValue ? `
+                                    <div class="target-current-value">
+                                        <strong>当前值:</strong> <code>${target.currentValue}</code>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                targetsDetailHtml += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="config-item ${statusClass}">
+                    <div class="config-item-header">
+                        <label>${item.name}</label>
+                        <div class="status-info">
+                            <span class="status-icon" title="${statusMessage}">${statusIcon}</span>
+                            <span class="status-text">${statusMessage}</span>
+                            ${targetsDetailHtml ? `
+                                <button class="btn-expand" onclick="toggleTargetDetails(${index})" title="查看目标点详情">
+                                    <span id="expand-icon-${index}">▼</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div class="current-value">
+                        当前值: <span class="current-value-text">${currentValue || '未设置'}</span>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="item_${index}"
+                        placeholder="输入新值"
+                        value="${currentValue || ''}"
+                    >
+                    ${item.description && item.description.trim() ? `<small style="color: #6c757d;">${item.description}</small>` : ''}
+                    ${targetsDetailHtml}
+                </div>
+            `;
+        });
+
+        // 检查是否有ERROR状态的配置项
+        let hasErrors = false;
+        let errorCount = 0;
+        
+        // 只有当有状态信息时才检查
+        if (currentTemplateWithStatus && currentTemplateWithStatus.itemStatuses) {
+            currentTemplate.items.forEach(item => {
+                const status = currentTemplateWithStatus.itemStatuses[item.name];
+                if (status && status.status === 'ERROR') {
+                    hasErrors = true;
+                    errorCount++;
+                }
+            });
+        }
+
+        // 根据状态显示按钮
+        if (hasErrors) {
+            html += `
+                <div style="margin-top: 32px; text-align: center;">
+                    <button class="btn btn-secondary btn-large" disabled title="有配置项需要检查">
+                        无法应用配置
+                    </button>
+                </div>
+            `;
+        } else {
+            html += `
+                <div style="margin-top: 32px; text-align: center;">
+                    <button class="btn btn-success btn-large" onclick="applyChanges()">
+                        应用配置
+                    </button>
+                </div>
+            `;
+        }
+    } else {
+        html += `
+            <div class="empty-state">
+                <h3>此模板暂无配置项</h3>
+                <p>点击"编辑模板"按钮添加配置项</p>
+            </div>
+        `;
+    }
+
+    workspace.innerHTML = html;
+}
+
+
+
+// 切换目标点详情显示
+function toggleTargetDetails(index) {
+    const detailDiv = document.getElementById(`targets-detail-${index}`);
+    const expandIcon = document.getElementById(`expand-icon-${index}`);
+    
+    if (detailDiv.style.display === 'none') {
+        detailDiv.style.display = 'block';
+        expandIcon.textContent = '▲';
+    } else {
+        detailDiv.style.display = 'none';
+        expandIcon.textContent = '▼';
+    }
+}
+
+// 通用关闭模态框函数
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('show');
+        // 延迟移除元素，让动画完成
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+}
+
+// 验证目标点有效性的共用函数
+async function validateTargetPoint(filePath, lineNumber, prefix, suffix) {
+    if (!filePath) {
+        throw new Error('文件路径不能为空');
+    }
+    
+    if (!lineNumber || lineNumber < 1) {
+        throw new Error('行号必须是大于0的整数');
+    }
+    
+    if (!prefix) {
+        throw new Error('前缀不能为空');
+    }
+    
+    try {
+        // 调用Java后端验证文件和匹配项
+        const request = {
+            filePath: filePath,
+            prefix: prefix,
+            suffix: suffix || ''
+        };
+        
+        const resultJSON = await window.javaApp.findMatches(JSON.stringify(request));
+        const result = JSON.parse(resultJSON);
+        
+        if (!result.success) {
+            throw new Error(result.error || '文件验证失败');
+        }
+        
+        const matches = result.data || [];
+        
+        // 检查指定行号是否在匹配结果中
+        const lineMatch = matches.find(match => match.lineNumber === lineNumber);
+        if (!lineMatch) {
+            throw new Error(`第 ${lineNumber} 行未找到匹配的前缀 "${prefix}"`);
+        }
+        
+        return true;
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
+// 创建新模板
+function createTemplate() {
+    // 防止并发调用
+    if (isLoading) {
+        console.log('createTemplate: 正在加载中，跳过调用');
+        return;
+    }
+    
+    console.log('createTemplate: 开始创建新模板');
+    
+    editingTemplate = {
+        name: '',
+        description: '',
+        items: []
+    };
+    selectedConfigItem = null;
+    
+    showTemplateEditor();
+    console.log('createTemplate: 模板编辑器已显示');
+}
+
+// 生成DFM配置模板 - 使用Java Bridge调用
+async function generateDfmTemplate() {
+    // 防止并发调用
+    if (isLoading) {
+        console.log('generateDfmTemplate: 正在加载中，跳过调用');
+        return;
+    }
+    
+    console.log('generateDfmTemplate: 开始生成DFM配置模板');
+    
+    try {
+        showLoading('正在生成DFM配置模板，请稍候...');
+        
+        const resultJSON = await window.javaApp.generateDfmTemplate();
+        const result = JSON.parse(resultJSON);
+        
+        if (result.success) {
+            const generatedTemplate = result.data;
+            
+            // 添加到模板数组
+            templates.push(generatedTemplate);
+            
+            // 重新渲染模板列表
+            renderTemplateList();
+            
+            showSuccess(`DFM配置模板生成成功！模板名称：${generatedTemplate.name}`);
+            console.log('generateDfmTemplate: 生成成功', generatedTemplate);
+        } else {
+            showError('生成DFM配置模板失败: ' + result.message);
+            console.error('generateDfmTemplate: 生成失败', result.message);
+        }
+    } catch (error) {
+        console.error('生成DFM配置模板失败:', error);
+        showError('生成DFM配置模板失败: ' + error.message);
+    } finally {
+        hideLoading();
+    }
+}
+
+// 编辑模板 - 使用Java Bridge调用
+async function editTemplate(templateId) {
+    // 防止并发调用
+    if (isLoading) {
+        return;
+    }
+    
+    try {
+        if (templateId) {
+            showLoading('加载模板数据...');
+            
+            const resultJSON = await window.javaApp.getTemplateDetail(templateId);
+            const result = JSON.parse(resultJSON);
+            
+            if (result.success) {
+                editingTemplate = result.data;
+                
+                if (!editingTemplate.items || !Array.isArray(editingTemplate.items)) {
+                    editingTemplate.items = [];
+                }
+            } else {
+                showError('加载模板失败: ' + result.error);
+                return;
+            }
+        }
+        
+        selectedConfigItem = null;
+        showTemplateEditor();
+    } catch (error) {
+        console.error('加载模板失败:', error);
+        showError('加载模板失败: ' + error.message);
+    } finally {
+        hideLoading();
+    }
+}
+
+// 显示模板编辑器
+function showTemplateEditor() {
+    console.log('显示模板编辑器, editingTemplate:', editingTemplate);
+    
+    document.getElementById('templateName').value = editingTemplate.name;
+    document.getElementById('templateDescription').value = editingTemplate.description || '';
+    
+    renderConfigItemsList();
+    document.getElementById('templateEditorModal').classList.add('show');
+}
+
+// 保存模板 - 使用Java Bridge调用
+async function saveTemplate() {
+    // 防止并发调用
+    if (isLoading) {
+        return;
+    }
+    
+    if (!editingTemplate) {
+        showError('没有正在编辑的模板');
+        return;
+    }
+
+    editingTemplate.name = document.getElementById('templateName').value.trim();
+    editingTemplate.description = document.getElementById('templateDescription').value.trim();
+
+    if (!editingTemplate.name) {
+        showError('请输入模板名称');
+        return;
+    }
+    
+    // 检查模板名称是否重复（除了当前编辑的模板）
+    const existingTemplate = templates.find(t => 
+        t.name === editingTemplate.name && t.id !== editingTemplate.id
+    );
+    if (existingTemplate) {
+        showError(`模板名称"${editingTemplate.name}"已存在，请使用不同的名称`);
+        return;
+    }
+
+    try {
+        showLoading('保存模板中...');
+        
+        const resultJSON = await window.javaApp.saveTemplate(JSON.stringify(editingTemplate));
+        const result = JSON.parse(resultJSON);
+        
+        if (result.success) {
+            const savedTemplate = result.data;
+            
+            // 更新或添加到模板数组
+            const existingIndex = templates.findIndex(t => t.id === savedTemplate.id);
+            if (existingIndex !== -1) {
+                templates[existingIndex] = savedTemplate;
+            } else {
+                templates.push(savedTemplate);
+            }
+            
+            // 更新当前模板
+            if (currentTemplate && currentTemplate.id === savedTemplate.id) {
+                currentTemplate = savedTemplate;
+                renderWorkspace();
+            }
+            
+            editingTemplate = null;
+            selectedConfigItem = null;
+            closeTemplateEditor();
+            renderTemplateList(); // 重新渲染列表以显示更新
+            showSuccess('模板保存成功');
+        } else {
+            showError('保存失败: ' + result.error);
+        }
+    } catch (error) {
+        console.error('保存模板失败:', error);
+        showError('保存失败: ' + error.message);
+    } finally {
+        hideLoading();
+    }
+}
+
+// 关闭模板编辑器
+function closeTemplateEditor() {
+    document.getElementById('templateEditorModal').classList.remove('show');
+    editingTemplate = null;
+    selectedConfigItem = null;
+}
+
+// 显示添加配置项表单
+function showAddConfigItemForm() {
+    document.getElementById('newConfigItemName').value = '';
+    document.getElementById('newConfigItemDescription').value = '';
+    document.getElementById('addConfigItemModal').classList.add('show');
+}
+
+// 关闭添加配置项表单
+function closeAddConfigItemForm() {
+    document.getElementById('addConfigItemModal').classList.remove('show');
+}
+
+// 确认添加配置项
+function confirmAddConfigItem() {
+    const name = document.getElementById('newConfigItemName').value.trim();
+    const description = document.getElementById('newConfigItemDescription').value.trim();
+
+    if (!name) {
+        showError('请输入配置项名称');
+        return;
+    }
+
+    if (!editingTemplate.items || !Array.isArray(editingTemplate.items)) {
+        editingTemplate.items = [];
+    }
+    
+    // 检查配置项名称是否重复
+    const existingItem = editingTemplate.items.find(item => item.name === name);
+    if (existingItem) {
+        showError(`配置项"${name}"已存在，请使用不同的名称`);
+        return;
+    }
+
+    const newItem = {
+        name: name,
+        description: description,
+        targets: []
+    };
+    
+    editingTemplate.items.push(newItem);
+    renderConfigItemsList();
+    closeAddConfigItemForm();
+    showSuccess(`配置项"${name}"添加成功`);
+}
+
+// 渲染配置项列表
+function renderConfigItemsList() {
+    const container = document.getElementById('configItemsList');
+    container.innerHTML = '';
+    
+    if (!editingTemplate.items || !Array.isArray(editingTemplate.items)) {
+        editingTemplate.items = [];
+    }
+    
+    if (editingTemplate.items.length === 0) {
+        container.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 20px;">暂无配置项，点击上方按钮添加</p>';
+        document.getElementById('targetsSection').style.display = 'none';
+        return;
+    }
+
+    editingTemplate.items.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'config-item-row';
+        if (selectedConfigItem === item) {
+            div.classList.add('selected');
+        }
+        
+        div.innerHTML = `
+            <div class="config-item-info">
+                <div class="config-item-name">${item.name}</div>
+                <div class="config-item-meta">
+                    ${item.description ? `<span class="config-item-desc">${item.description}</span>` : ''}
+                    <span class="target-count">目标点: ${item.targets ? item.targets.length : 0}个</span>
+                </div>
+            </div>
+            <div class="config-item-actions">
+                <button class="btn btn-secondary btn-small edit-config-btn" data-index="${index}">编辑</button>
+                <button class="btn btn-danger btn-small delete-config-btn" data-index="${index}">删除</button>
+            </div>
+        `;
+        
+        const infoDiv = div.querySelector('.config-item-info');
+        infoDiv.addEventListener('click', () => selectConfigItem(item));
+        
+        const editBtn = div.querySelector('.edit-config-btn');
+        editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            editConfigItem(index);
+        });
+        
+        const deleteBtn = div.querySelector('.delete-config-btn');
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteConfigItem(index);
+        });
+        
+        container.appendChild(div);
+    });
+    
+    if (selectedConfigItem) {
+        document.getElementById('targetsSection').style.display = 'block';
+        renderTargetsList();
+    } else {
+        document.getElementById('targetsSection').style.display = 'none';
+    }
+}
+
+// 编辑配置项
+function editConfigItem(index) {
+    const item = editingTemplate.items[index];
+    
+    // 创建编辑对话框
+    const modalHtml = `
+        <div class="modal fade" id="editConfigModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">编辑配置项</h4>
+                        <button type="button" class="close" onclick="closeModal('editConfigModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editConfigName">配置项名称</label>
+                            <input type="text" id="editConfigName" value="${item.name}" placeholder="请输入配置项名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="editConfigDesc">配置项描述</label>
+                            <textarea id="editConfigDesc" placeholder="请输入配置项描述（可选）">${item.description || ''}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editConfigModal')">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="saveConfigItemEdit(${index})">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 移除旧的模态框
+    const oldModal = document.getElementById('editConfigModal');
+    if (oldModal) {
+        oldModal.remove();
+    }
+    
+    // 添加新的模态框
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // 使用原生JavaScript显示模态框
+    const modal = document.getElementById('editConfigModal');
+    modal.classList.add('show');
+    
+    // 添加点击背景关闭功能
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal('editConfigModal');
+        }
+    });
+}
+
+// 保存配置项编辑
+async function saveConfigItemEdit(index) {
+    const nameInput = document.getElementById('editConfigName');
+    const descInput = document.getElementById('editConfigDesc');
+    
+    const newName = nameInput.value.trim();
+    const newDesc = descInput.value.trim();
+    
+    if (!newName) {
+        showError('配置项名称不能为空');
+        return;
+    }
+    
+    // 检查名称是否重复（除了当前编辑的项）
+    const existingItem = editingTemplate.items.find((item, i) => 
+        i !== index && item.name === newName
+    );
+    if (existingItem) {
+        showError(`配置项名称"${newName}"已存在`);
+        return;
+    }
+    
+    // 更新配置项
+    const item = editingTemplate.items[index];
+    item.name = newName;
+    item.description = newDesc;
+    
+    // 如果是编辑已有模板，需要保存更改
+    if (editingTemplate.id) {
+        try {
+            showLoading('保存配置项中...');
+            
+            const templateData = JSON.stringify(editingTemplate);
+            const resultJSON = await window.javaApp.saveTemplate(templateData);
+            const result = JSON.parse(resultJSON);
+            
+            if (result.success) {
+                // 更新currentTemplate
+                if (currentTemplate && currentTemplate.id === editingTemplate.id) {
+                    currentTemplate = editingTemplate;
+                }
+                
+                // 使用原生JavaScript隐藏模态框
+                const modal = document.getElementById('editConfigModal');
+                modal.classList.remove('show');
+                modal.remove();
+                
+                renderConfigItemsList();
+                showSuccess('配置项更新成功');
+            } else {
+                showError('保存失败: ' + result.error);
+            }
+        } catch (error) {
+            console.error('保存模板出错:', error);
+            showError('保存失败: ' + error.message);
+        } finally {
+            hideLoading();
+        }
+    } else {
+        // 新模板，直接在内存中更新即可
+        // 使用原生JavaScript隐藏模态框
+        const modal = document.getElementById('editConfigModal');
+        modal.classList.remove('show');
+        modal.remove();
+        
+        renderConfigItemsList();
+        showSuccess('配置项更新成功');
+    }
+}
+
+// 删除配置项
+async function deleteConfigItem(index) {
+    // 防止并发调用
+    if (isLoading) {
+        return;
+    }
+    
+    const item = editingTemplate.items[index];
+    
+    // 使用自定义确认对话框
+    const confirmed = await customConfirm(`确定要删除配置项"${item.name}"吗？`);
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    editingTemplate.items.splice(index, 1);
+    if (selectedConfigItem === item) {
+        selectedConfigItem = null;
+    }
+    
+    // 如果是编辑已有模板，需要保存更改
+    if (editingTemplate.id) {
+        try {
+            showLoading('删除配置项中...');
+            
+            const templateData = JSON.stringify(editingTemplate);
+            const resultJSON = await window.javaApp.saveTemplate(templateData);
+            const result = JSON.parse(resultJSON);
+            
+            if (result.success) {
+                // 更新currentTemplate
+                if (currentTemplate && currentTemplate.id === editingTemplate.id) {
+                    currentTemplate = editingTemplate;
+                }
+                renderConfigItemsList();
+                showSuccess('配置项删除成功');
+            } else {
+                showError('删除失败: ' + result.error);
+                // 撤销删除
+                editingTemplate.items.splice(index, 0, item);
+                if (selectedConfigItem === null) {
+                    selectedConfigItem = item;
+                }
+                renderConfigItemsList();
+            }
+        } catch (error) {
+            console.error('保存模板出错:', error);
+            showError('删除失败: ' + error.message);
+            // 撤销删除
+            editingTemplate.items.splice(index, 0, item);
+            if (selectedConfigItem === null) {
+                selectedConfigItem = item;
+            }
+            renderConfigItemsList();
+        } finally {
+            hideLoading();
+        }
+    } else {
+        // 新模板，直接在内存中删除即可
+        renderConfigItemsList();
+        showSuccess('配置项删除成功');
+    }
+}
+
+// 选择配置项
+function selectConfigItem(item) {
+    selectedConfigItem = item;
+    renderConfigItemsList();
+}
+
+// 渲染目标点列表
+function renderTargetsList() {
+    const container = document.getElementById('targetsList');
+    container.innerHTML = '';
+    
+    if (!selectedConfigItem) {
+        return;
+    }
+    
+    if (!selectedConfigItem.targets) {
+        selectedConfigItem.targets = [];
+    }
+    
+    if (selectedConfigItem.targets.length === 0) {
+        container.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 20px;">暂无目标点，点击上方按钮添加</p>';
+        return;
+    }
+    
+    selectedConfigItem.targets.forEach((target, index) => {
+        const div = document.createElement('div');
+        div.className = 'target-item';
+        div.innerHTML = `
+            <div class="target-file">${target.filePath}</div>
+            <div class="target-details">
+                行 ${target.lineNumber} | 前缀: "${target.prefix}" ${target.suffix ? `| 后缀: "${target.suffix}"` : ''}
+                <div style="float: right;">
+                    <button class="btn btn-secondary btn-small edit-target-btn" data-index="${index}" style="margin-right: 4px;">编辑</button>
+                    <button class="btn btn-danger btn-small delete-target-btn" data-index="${index}">删除</button>
+                </div>
+            </div>
+        `;
+        
+        const editBtn = div.querySelector('.edit-target-btn');
+        editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            editTarget(index);
+        });
+        
+        const deleteBtn = div.querySelector('.delete-target-btn');
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteTarget(index);
+        });
+        
+        container.appendChild(div);
+    });
+}
+
+// 编辑目标点（功能已移除，避免复杂性）
+function editTarget(index) {
+    showError('编辑目标点功能暂不支持，请删除后重新添加');
+}
+
+
+
+// 删除目标点
+async function deleteTarget(index) {
+    // 防止并发调用
+    if (isLoading) {
+        return;
+    }
+    
+    // 使用自定义确认对话框
+    const confirmed = await customConfirm('确定要删除这个目标点吗？');
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    const removedTarget = selectedConfigItem.targets.splice(index, 1)[0];
+    
+    // 如果是编辑已有模板，需要保存更改
+    if (editingTemplate.id) {
+        try {
+            showLoading('删除目标点中...');
+            
+            const templateData = JSON.stringify(editingTemplate);
+            const resultJSON = await window.javaApp.saveTemplate(templateData);
+            const result = JSON.parse(resultJSON);
+            
+            if (result.success) {
+                // 更新currentTemplate
+                if (currentTemplate && currentTemplate.id === editingTemplate.id) {
+                    currentTemplate = editingTemplate;
+                }
+                renderTargetsList();
+                renderConfigItemsList();
+                showSuccess('目标点删除成功');
+            } else {
+                showError('删除失败: ' + result.error);
+                // 撤销删除
+                selectedConfigItem.targets.splice(index, 0, removedTarget);
+                renderTargetsList();
+                renderConfigItemsList();
+            }
+        } catch (error) {
+            console.error('保存模板出错:', error);
+            showError('删除失败: ' + error.message);
+            // 撤销删除
+            selectedConfigItem.targets.splice(index, 0, removedTarget);
+            renderTargetsList();
+            renderConfigItemsList();
+        } finally {
+            hideLoading();
+        }
+    } else {
+        // 新模板，直接在内存中删除即可
+        renderTargetsList();
+        renderConfigItemsList();
+        showSuccess('目标点删除成功');
+    }
+}
+
+// 添加目标点
+function addTarget() {
+    if (!selectedConfigItem) {
+        showError('请先选择一个配置项');
+        return;
+    }
+    
+    document.getElementById('targetFilePath').value = '';
+    document.getElementById('searchPrefix').value = '';
+    document.getElementById('searchSuffix').value = '';
+    document.getElementById('matchResultsSection').style.display = 'none';
+    document.getElementById('confirmSelectionBtn').style.display = 'none';
+    document.getElementById('fileSearchModal').classList.add('show');
+}
+
+// 关闭文件搜索
+function closeFileSearch() {
+    document.getElementById('fileSearchModal').classList.remove('show');
+    currentMatches = [];
+}
+
+// 选择文件（模拟文件选择）
+function selectFile() {
+    const filePath = prompt('请输入完整的文件路径:');
+    if (filePath) {
+        document.getElementById('targetFilePath').value = cleanFilePath(filePath);
+    }
+}
+
+// 查找匹配项 - 使用Java Bridge调用
+async function findMatches() {
+    // 防止并发调用
+    if (isLoading) {
+        debugLog('findMatches: 系统繁忙，跳过调用');
+        return;
+    }
+    
+    debugLog('findMatches: 开始查找匹配项', 'findMatches');
+    
+    const rawFilePath = document.getElementById('targetFilePath').value.trim();
+    const prefix = document.getElementById('searchPrefix').value.trim();
+    const suffix = document.getElementById('searchSuffix').value.trim();
+    
+    if (!rawFilePath) {
+        debugLog('findMatches: 文件路径为空');
+        showError('请输入文件路径');
+        return;
+    }
+    
+    if (!prefix) {
+        debugLog('findMatches: 前缀为空');
+        showError('请输入前缀');
+        return;
+    }
+    
+    debugLog(`findMatches: 文件路径="${rawFilePath}", 前缀="${prefix}", 后缀="${suffix}"`);
+    
+    try {
+        showLoading('查找匹配项中...');
+        
+        const filePath = cleanFilePath(rawFilePath);
+        debugLog(`findMatches: 清理后文件路径="${filePath}"`);
+        
+        const request = {
+            filePath: filePath,
+            prefix: prefix,
+            suffix: suffix
+        };
+        
+        debugLog('findMatches: 调用Java后端查找匹配项', 'findMatchesAPI');
+        const resultJSON = await window.javaApp.findMatches(JSON.stringify(request));
+        debugLogEnd('findMatchesAPI');
+        
+        debugLog('findMatches: 解析查找结果', 'parseMatchResults');
+        const result = JSON.parse(resultJSON);
+        debugLogEnd('parseMatchResults');
+        
+        if (result.success) {
+            currentMatches = result.data || [];
+            debugLog(`findMatches: 找到${currentMatches.length}个匹配项`);
+            
+            debugLog('findMatches: 渲染匹配结果', 'renderMatchResults');
+            renderMatchResults();
+            debugLogEnd('renderMatchResults');
+            
+            if (currentMatches.length === 0) {
+                showError('没有找到匹配的内容');
+            }
+        } else {
+            throw new Error(result.error || '查找失败');
+        }
+    } catch (error) {
+        debugLog(`findMatches: 错误 - ${error.message}`);
+        console.error('查找匹配项失败:', error);
+        showError('查找失败: ' + error.message);
+    } finally {
+        hideLoading();
+        debugLogEnd('findMatches');
+    }
+}
+
+// 渲染匹配结果
+function renderMatchResults() {
+    const container = document.getElementById('matchResults');
+    container.innerHTML = '';
+    
+    if (currentMatches.length === 0) {
+        document.getElementById('matchResultsSection').style.display = 'none';
+        document.getElementById('confirmSelectionBtn').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('matchResultsSection').style.display = 'block';
+    document.getElementById('confirmSelectionBtn').style.display = 'inline-block';
+    
+    currentMatches.forEach((match, index) => {
+        const div = document.createElement('div');
+        div.className = 'match-item';
+        div.innerHTML = `
+            <input type="checkbox" id="match_${index}" value="${index}">
+            <label for="match_${index}" class="match-line-number">行 ${match.lineNumber}</label>
+            <div class="match-content">${match.lineContent}</div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// 确认选择
+function confirmSelection() {
+    const checkboxes = document.querySelectorAll('#matchResults input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        showError('请选择至少一个匹配项');
+        return;
+    }
+    
+    const filePath = cleanFilePath(document.getElementById('targetFilePath').value.trim());
+    const prefix = document.getElementById('searchPrefix').value.trim();
+    const suffix = document.getElementById('searchSuffix').value.trim();
+    
+    if (!selectedConfigItem.targets) {
+        selectedConfigItem.targets = [];
+    }
+    
+    let addedCount = 0;
+    let duplicateCount = 0;
+    
+    checkboxes.forEach(checkbox => {
+        const index = parseInt(checkbox.value);
+        const match = currentMatches[index];
+        
+        // 检查是否已存在相同的目标点
+        const existingTarget = selectedConfigItem.targets.find(target => 
+            target.filePath === filePath && 
+            target.lineNumber === match.lineNumber && 
+            target.prefix === prefix && 
+            target.suffix === suffix
+        );
+        
+        if (existingTarget) {
+            duplicateCount++;
+        } else {
+            selectedConfigItem.targets.push({
+                filePath: filePath,
+                lineNumber: match.lineNumber,
+                prefix: prefix,
+                suffix: suffix
+            });
+            addedCount++;
+        }
+    });
+    
+    renderTargetsList();
+    renderConfigItemsList();
+    closeFileSearch();
+    
+    if (addedCount > 0) {
+        let message = `成功添加 ${addedCount} 个目标点`;
+        if (duplicateCount > 0) {
+            message += `，跳过 ${duplicateCount} 个重复项`;
+        }
+        showSuccess(message);
+    } else {
+        showError('所选目标点都已存在，未添加任何新目标点');
+    }
+}
+
+
+
+// 显示应用结果
+function showApplyResult(applyResult) {
+    const modalHtml = `
+        <div class="modal fade" id="applyResultModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">配置应用结果</h4>
+                        <button type="button" class="close" onclick="closeModal('applyResultModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert ${applyResult.allSuccess ? 'alert-success' : (applyResult.successCount > 0 ? 'alert-warning' : 'alert-danger')}">
+                            <strong>${applyResult.summary}</strong>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>配置项</th>
+                                        <th>状态</th>
+                                        <th>详情</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${applyResult.results.map(result => `
+                                        <tr class="${result.success ? 'table-success' : 'table-danger'}">
+                                            <td>${result.configItemName}</td>
+                                            <td>
+                                                <span class="badge ${result.success ? 'badge-success' : 'badge-danger'}">
+                                                    ${result.success ? '成功' : '失败'}
+                                                </span>
+                                            </td>
+                                            <td>${result.description}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="closeModal('applyResultModal')">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 移除旧的模态框
+    const oldModal = document.getElementById('applyResultModal');
+    if (oldModal) {
+        oldModal.remove();
+    }
+    
+    // 添加新的模态框
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // 使用原生JavaScript显示模态框
+    const modal = document.getElementById('applyResultModal');
+    modal.classList.add('show');
+    
+    // 添加点击背景关闭功能
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal('applyResultModal');
+        }
+    });
+}
+
+
+
+// 应用修改 - 带前端状态检查
+async function applyChanges() {
+    // 防止并发调用
+    if (isLoading) {
+        console.log('applyChanges: 系统繁忙，跳过调用');
+        return;
+    }
+    
+    console.log('applyChanges: 开始应用配置修改');
+    
+    if (!currentTemplate || !currentTemplate.items) {
+        console.log('applyChanges: 没有当前模板或配置项');
+        showError('没有可应用的配置项');
+        return;
+    }
+
+
+
+    console.log('applyChanges: 收集用户输入值并与当前值比较');
+    const values = {};
+    let hasChanges = false;
+    
+    currentTemplate.items.forEach((item, index) => {
+        const input = document.getElementById(`item_${index}`);
+        if (input && input.value !== '') {
+            // 获取当前值
+            let currentValue = '';
+            if (currentTemplateWithStatus && currentTemplateWithStatus.itemStatuses) {
+                const status = currentTemplateWithStatus.itemStatuses[item.name];
+                if (status && status.currentValue) {
+                    currentValue = status.currentValue;
+                }
+            }
+            
+            // 比较输入值和当前值
+            const newValue = input.value.trim();
+            if (newValue !== currentValue) {
+                values[item.name] = newValue;
+                hasChanges = true;
+                console.log(`applyChanges: 配置项有变化 "${item.name}": "${currentValue}" -> "${newValue}"`);
+            } else {
+                console.log(`applyChanges: 配置项无变化 "${item.name}": "${newValue}"`);
+            }
+        }
+    });
+
+    if (!hasChanges) {
+        console.log('applyChanges: 没有需要修改的配置项（所有值都与当前值相同）');
+        showSuccess('所有配置项的值都没有变化，无需修改');
+        return;
+    }
+
+    const request = {
+        templateId: currentTemplate.id,
+        values: values
+    };
+        
+    try {
+        showLoading('应用配置中...');
+        
+        console.log('applyChanges: 调用Java后端应用配置');
+        const resultJSON = await window.javaApp.applyChanges(JSON.stringify(request));
+        const result = JSON.parse(resultJSON);
+        
+        hideLoading();
+        
+        if (result.success) {
+            const applyResult = result.data;
+            console.log(`applyChanges: 配置应用完成 - ${applyResult.summary}`);
+            
+            // 显示详细结果
+            showApplyResult(applyResult);
+            
+            // 如果全部成功，重新加载模板状态
+            if (applyResult.allSuccess) {
+                console.log('applyChanges: 重新加载模板状态');
+                selectTemplate(currentTemplate.id);
+            }
+        } else {
+            throw new Error(result.error || '应用失败');
+        }
+        
+    } catch (error) {
+        console.log(`applyChanges: 错误 - ${error.message}`);
+        console.error('应用配置失败:', error);
+        hideLoading();
+        showError('应用失败: ' + error.message);
+    }
+}
+
+
+    </script>
+</body>
+</html>

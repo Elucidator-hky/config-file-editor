@@ -27,8 +27,8 @@ database:
     driver: "postgresql"
 host:127.0.0.1
     port: 5432
-    name: "modern_app"
-    username: "app_user"
+    namedfadfasdfadsfasdfasdf
+    username: "user"
     password: "pg_secure_password"
     ssl_mode: "require"
     max_connections: 25

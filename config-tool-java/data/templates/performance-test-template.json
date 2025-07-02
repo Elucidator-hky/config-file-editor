@@ -1,0 +1,1068 @@
+{
+  "id": "performance-test-template",
+  "name": "性能测试模板 (200个目标点)",
+  "description": "用于测试配置项状态分析性能的模板，基于真实文件内容创建，确保所有目标点都可正常访问",
+  "items": [
+    {
+      "id": "database-host",
+      "name": "数据库主机IP",
+      "description": "数据库服务器IP地址配置",
+      "defaultValue": "127.0.0.1",
+      "targets": [
+        {
+          "id": "db-host-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 23,
+          "prefix": "\"host\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "db-host-config-json-2", 
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 33,
+          "prefix": "\"host\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "db-host-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 15,
+          "prefix": "host =",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-app-ini-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini", 
+          "lineNumber": 23,
+          "prefix": "host =",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 27,
+          "prefix": "<host>",
+          "suffix": "</host>"
+        },
+        {
+          "id": "db-host-settings-xml-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 37,
+          "prefix": "<host>",
+          "suffix": "</host>"
+        },
+        {
+          "id": "db-host-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf", 
+          "lineNumber": 8,
+          "prefix": "DatabaseHost =",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 29,
+          "prefix": "host:",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-app-yaml-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 57,
+          "prefix": "host:",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 2,
+          "prefix": "db.primary.host=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 9,
+          "prefix": "db.backup.host=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-db-props-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 16,
+          "prefix": "cache.redis.host=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-db-props-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 30,
+          "prefix": "monitor.host=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 19,
+          "prefix": "DB_HOST=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 27,
+          "prefix": "REDIS_HOST=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-env-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 34,
+          "prefix": "MONITOR_HOST=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-network-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 3,
+          "prefix": "ip_address=",
+          "suffix": ""
+        },
+        {
+          "id": "db-host-network-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 5,
+          "prefix": "gateway=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "database-port",
+      "name": "数据库端口",
+      "description": "数据库服务器端口号",
+      "defaultValue": "3306",
+      "targets": [
+        {
+          "id": "db-port-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 24,
+          "prefix": "\"port\": ",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-config-json-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 34,
+          "prefix": "\"port\": ",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 9,
+          "prefix": "port =",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-app-ini-2", 
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 16,
+          "prefix": "port =",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 28,
+          "prefix": "<port>",
+          "suffix": "</port>"
+        },
+        {
+          "id": "db-port-settings-xml-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml", 
+          "lineNumber": 38,
+          "prefix": "<port>",
+          "suffix": "</port>"
+        },
+        {
+          "id": "db-port-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 4,
+          "prefix": "ServerPort =",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-server-conf-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 9,
+          "prefix": "DatabasePort =",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 12,
+          "prefix": "port:",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-app-yaml-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 30,
+          "prefix": "port:",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 3,
+          "prefix": "db.primary.port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 10,
+          "prefix": "db.backup.port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-db-props-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 17,
+          "prefix": "cache.redis.port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-db-props-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 31,
+          "prefix": "monitor.port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 9,
+          "prefix": "SERVICE_PORT=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 20,
+          "prefix": "DB_PORT=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-env-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 28,
+          "prefix": "REDIS_PORT=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-env-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 33,
+          "prefix": "MONITOR_PORT=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-env-5",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 42,
+          "prefix": "SSL_PORT=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-network-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 17,
+          "prefix": "ssh_port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-network-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 18,
+          "prefix": "http_port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-network-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 19,
+          "prefix": "https_port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-network-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 24,
+          "prefix": "snmp_port=",
+          "suffix": ""
+        },
+        {
+          "id": "db-port-network-5",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 30,
+          "prefix": "server_port=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "service-name",
+      "name": "服务名称",
+      "description": "应用服务名称标识",
+      "defaultValue": "config-tool",
+      "targets": [
+        {
+          "id": "service-name-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 3,
+          "prefix": "\"name\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "service-name-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 2,
+          "prefix": "name =",
+          "suffix": ""
+        },
+        {
+          "id": "service-name-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 5,
+          "prefix": "<n>",
+          "suffix": "</n>"
+        },
+        {
+          "id": "service-name-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 3,
+          "prefix": "name: \"",
+          "suffix": "\""
+        },
+        {
+          "id": "service-name-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 4,
+          "prefix": "db.primary.name=",
+          "suffix": ""
+        },
+        {
+          "id": "service-name-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 11,
+          "prefix": "db.backup.name=",
+          "suffix": ""
+        },
+        {
+          "id": "service-name-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 10,
+          "prefix": "SERVICE_NAME=",
+          "suffix": ""
+        },
+        {
+          "id": "service-name-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 21,
+          "prefix": "DB_NAME=",
+          "suffix": ""
+        },
+        {
+          "id": "service-name-network-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 2,
+          "prefix": "interface=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "log-level",
+      "name": "日志级别",
+      "description": "应用日志输出级别",
+      "defaultValue": "INFO",
+      "targets": [
+        {
+          "id": "log-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 38,
+          "prefix": "\"level\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "log-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 30,
+          "prefix": "level =",
+          "suffix": ""
+        },
+        {
+          "id": "log-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 43,
+          "prefix": "<level>",
+          "suffix": "</level>"
+        },
+        {
+          "id": "log-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 20,
+          "prefix": "LogLevel =",
+          "suffix": ""
+        },
+        {
+          "id": "log-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 45,
+          "prefix": "level: \"",
+          "suffix": "\""
+        },
+        {
+          "id": "log-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 14,
+          "prefix": "LOG_LEVEL=",
+          "suffix": ""
+        },
+        {
+          "id": "log-network-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 25,
+          "prefix": "log_level=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "ssl-enabled",
+      "name": "SSL启用状态",
+      "description": "SSL/TLS加密是否启用",
+      "defaultValue": "false",
+      "targets": [
+        {
+          "id": "ssl-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 11,
+          "prefix": "\"enabled\": ",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 10,
+          "prefix": "ssl =",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 13,
+          "prefix": "enabled=\"",
+          "suffix": "\""
+        },
+        {
+          "id": "ssl-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 24,
+          "prefix": "SSLEnabled =",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 15,
+          "prefix": "enabled:",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 28,
+          "prefix": "monitor.enabled=",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 32,
+          "prefix": "MONITOR_ENABLED=",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 38,
+          "prefix": "SSL_ENABLED=",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-network-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 15,
+          "prefix": "enabled=",
+          "suffix": ""
+        },
+        {
+          "id": "ssl-network-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 22,
+          "prefix": "snmp_enabled=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "password-config",
+      "name": "密码配置",
+      "description": "各种系统密码配置",
+      "defaultValue": "secure_password",
+      "targets": [
+        {
+          "id": "pass-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 27,
+          "prefix": "\"password\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "pass-config-json-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 35,
+          "prefix": "\"password\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "pass-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 19,
+          "prefix": "password =",
+          "suffix": ""
+        },
+        {
+          "id": "pass-app-ini-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 43,
+          "prefix": "password =",
+          "suffix": ""
+        },
+        {
+          "id": "pass-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 31,
+          "prefix": "<password>",
+          "suffix": "</password>"
+        },
+        {
+          "id": "pass-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 12,
+          "prefix": "DatabasePassword =",
+          "suffix": ""
+        },
+        {
+          "id": "pass-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 6,
+          "prefix": "db.primary.password=",
+          "suffix": ""
+        },
+        {
+          "id": "pass-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 13,
+          "prefix": "db.backup.password=",
+          "suffix": ""
+        },
+        {
+          "id": "pass-db-props-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 18,
+          "prefix": "cache.redis.password=",
+          "suffix": ""
+        },
+        {
+          "id": "pass-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 24,
+          "prefix": "DB_PASSWORD=",
+          "suffix": ""
+        },
+        {
+          "id": "pass-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 29,
+          "prefix": "REDIS_PASSWORD=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "timeout-config",
+      "name": "超时配置",
+      "description": "各种超时设置",
+      "defaultValue": "30",
+      "targets": [
+        {
+          "id": "timeout-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 35,
+          "prefix": "\"timeout\": ",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 26,
+          "prefix": "timeout =",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 18,
+          "prefix": "<timeout>",
+          "suffix": "</timeout>"
+        },
+        {
+          "id": "timeout-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 31,
+          "prefix": "Timeout =",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 40,
+          "prefix": "timeout:",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 20,
+          "prefix": "cache.redis.timeout=",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 25,
+          "prefix": "pool.timeout=",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-db-props-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 26,
+          "prefix": "pool.idle_timeout=",
+          "suffix": ""
+        },
+        {
+          "id": "timeout-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 35,
+          "prefix": "MONITOR_INTERVAL=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "version-config",
+      "name": "版本信息",
+      "description": "应用程序版本号",
+      "defaultValue": "1.0.0",
+      "targets": [
+        {
+          "id": "version-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 4,
+          "prefix": "\"version\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "version-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 3,
+          "prefix": "version =",
+          "suffix": ""
+        },
+        {
+          "id": "version-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 6,
+          "prefix": "<version>",
+          "suffix": "</version>"
+        },
+        {
+          "id": "version-app-yaml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 4,
+          "prefix": "version: \"",
+          "suffix": "\""
+        },
+        {
+          "id": "version-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 11,
+          "prefix": "SERVICE_VERSION=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "username-config",
+      "name": "用户名配置",
+      "description": "各种系统用户名配置",
+      "defaultValue": "admin",
+      "targets": [
+        {
+          "id": "user-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 26,
+          "prefix": "\"username\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "user-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 18,
+          "prefix": "username =",
+          "suffix": ""
+        },
+        {
+          "id": "user-app-ini-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 42,
+          "prefix": "username =",
+          "suffix": ""
+        },
+        {
+          "id": "user-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 30,
+          "prefix": "<username>",
+          "suffix": "</username>"
+        },
+        {
+          "id": "user-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 11,
+          "prefix": "DatabaseUser =",
+          "suffix": ""
+        },
+        {
+          "id": "user-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 5,
+          "prefix": "db.primary.username=",
+          "suffix": ""
+        },
+        {
+          "id": "user-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 12,
+          "prefix": "db.backup.username=",
+          "suffix": ""
+        },
+        {
+          "id": "user-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 23,
+          "prefix": "DB_USER=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "path-config",
+      "name": "路径配置",
+      "description": "各种文件和目录路径",
+      "defaultValue": "/var/log/app.log",
+      "targets": [
+        {
+          "id": "path-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 12,
+          "prefix": "\"cert_file\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "path-config-json-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 13,
+          "prefix": "\"key_file\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "path-config-json-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 40,
+          "prefix": "\"path\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "path-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 31,
+          "prefix": "file =",
+          "suffix": ""
+        },
+        {
+          "id": "path-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 14,
+          "prefix": "<certificate>",
+          "suffix": "</certificate>"
+        },
+        {
+          "id": "path-settings-xml-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 15,
+          "prefix": "<private_key>",
+          "suffix": "</private_key>"
+        },
+        {
+          "id": "path-settings-xml-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 45,
+          "prefix": "<path>",
+          "suffix": "</path>"
+        },
+        {
+          "id": "path-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 21,
+          "prefix": "LogPath =",
+          "suffix": ""
+        },
+        {
+          "id": "path-server-conf-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 25,
+          "prefix": "SSLCertPath =",
+          "suffix": ""
+        },
+        {
+          "id": "path-server-conf-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 26,
+          "prefix": "SSLKeyPath =",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 2,
+          "prefix": "JAVA_HOME=",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 3,
+          "prefix": "MAVEN_HOME=",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 4,
+          "prefix": "NODE_HOME=",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 5,
+          "prefix": "PYTHON_HOME=",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-5",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 15,
+          "prefix": "LOG_PATH=",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-6",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 39,
+          "prefix": "SSL_CERT_PATH=",
+          "suffix": ""
+        },
+        {
+          "id": "path-env-7",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 40,
+          "prefix": "SSL_KEY_PATH=",
+          "suffix": ""
+        },
+        {
+          "id": "path-network-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\network.conf",
+          "lineNumber": 26,
+          "prefix": "log_file=",
+          "suffix": ""
+        }
+      ]
+    },
+    {
+      "id": "size-config",
+      "name": "大小配置",
+      "description": "各种大小和数量限制配置",
+      "defaultValue": "100",
+      "targets": [
+        {
+          "id": "size-config-json-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\config.json",
+          "lineNumber": 41,
+          "prefix": "\"max_size\": \"",
+          "suffix": "\""
+        },
+        {
+          "id": "size-app-ini-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 11,
+          "prefix": "max_workers =",
+          "suffix": ""
+        },
+        {
+          "id": "size-app-ini-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 20,
+          "prefix": "pool_size =",
+          "suffix": ""
+        },
+        {
+          "id": "size-app-ini-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 32,
+          "prefix": "max_size =",
+          "suffix": ""
+        },
+        {
+          "id": "size-app-ini-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 33,
+          "prefix": "backup_count =",
+          "suffix": ""
+        },
+        {
+          "id": "size-app-ini-5",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 47,
+          "prefix": "max_login_attempts =",
+          "suffix": ""
+        },
+        {
+          "id": "size-settings-xml-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 17,
+          "prefix": "<max_connections>",
+          "suffix": "</max_connections>"
+        },
+        {
+          "id": "size-settings-xml-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 32,
+          "prefix": "<pool_size>",
+          "suffix": "</pool_size>"
+        },
+        {
+          "id": "size-settings-xml-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 46,
+          "prefix": "<max_size>",
+          "suffix": "</max_size>"
+        },
+        {
+          "id": "size-settings-xml-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 47,
+          "prefix": "<backup_count>",
+          "suffix": "</backup_count>"
+        },
+        {
+          "id": "size-server-conf-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 15,
+          "prefix": "CacheSize =",
+          "suffix": ""
+        },
+        {
+          "id": "size-server-conf-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 22,
+          "prefix": "LogMaxSize =",
+          "suffix": ""
+        },
+        {
+          "id": "size-server-conf-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 30,
+          "prefix": "MaxConnections =",
+          "suffix": ""
+        },
+        {
+          "id": "size-db-props-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 19,
+          "prefix": "cache.redis.database=",
+          "suffix": ""
+        },
+        {
+          "id": "size-db-props-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 23,
+          "prefix": "pool.min_size=",
+          "suffix": ""
+        },
+        {
+          "id": "size-db-props-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 24,
+          "prefix": "pool.max_size=",
+          "suffix": ""
+        },
+        {
+          "id": "size-db-props-4",
+          "filePath": "E:\\code\\editPath\\test-configs\\database.properties",
+          "lineNumber": 29,
+          "prefix": "monitor.interval=",
+          "suffix": ""
+        },
+        {
+          "id": "size-env-1",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 16,
+          "prefix": "LOG_MAX_SIZE=",
+          "suffix": ""
+        },
+        {
+          "id": "size-env-2",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 17,
+          "prefix": "LOG_BACKUP_COUNT=",
+          "suffix": ""
+        },
+        {
+          "id": "size-env-3",
+          "filePath": "E:\\code\\editPath\\test-configs\\system.env",
+          "lineNumber": 30,
+          "prefix": "REDIS_DB=",
+          "suffix": ""
+        }
+      ]
+    }
+  ]
+}

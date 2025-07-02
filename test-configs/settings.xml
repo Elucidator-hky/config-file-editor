@@ -24,9 +24,9 @@
     <!-- 数据库配置 -->
     <database>
         <primary type="mysql">
-            <host>127.0.0.1</host>
+            <host>127.0.0.699</host>
             <port>3306</port>
-            <schema>enterprise_db</schema>
+            <schema>testDB</schema>
             <username>dbadmin</username>
             <password>mysql_password_123</password>
             <pool_size>20</pool_size>
