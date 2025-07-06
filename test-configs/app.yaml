@@ -28,7 +28,7 @@ database:
 host:127.0.0.1
     port: 5432
     namedfadfasdfadsfasdfasdf
-    username: "user"
+    username: "usersdasdassadfasdfdsdsdasdfadsf"
     password: "pg_secure_password"
     ssl_mode: "require"
     max_connections: 25

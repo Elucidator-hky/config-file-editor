@@ -24,11 +24,11 @@
     <!-- 数据库配置 -->
     <database>
         <primary type="mysql">
-            <host>127.0.0.699</host>
+            <host>127.0.0.6jkjksadfasdfasdfas</host>
             <port>3306</port>
-            <schema>testDB</schema>
+            <schema>sdfadfasfaadsf</schema>
             <username>dbadmin</username>
-            <password>mysql_password_123</password>
+            <password>17116194217138197189187146108119129196119168122237113242361</password>
             <pool_size>20</pool_size>
         </primary>
         <cache type="redis">

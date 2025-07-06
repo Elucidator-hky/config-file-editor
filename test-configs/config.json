@@ -23,7 +23,7 @@
       "type": "postgresql",
       "host": "db.example.com",
       "port": 5432,
-      "database": "testDB",
+      "database": "sdfadfasfaadsf",
       "username": "appuser",
       "password": "securepass123",
       "ssl_mode": "require"
