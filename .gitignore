@@ -40,3 +40,51 @@ Thumbs.db
 
 # 生成的数据文件（可选，根据需要调整）
 # data/templates/*.json 
+
+# Java 相关忽略规则
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# Java 编译目录
+target/
+build/
+out/
+bin/
+
+# Maven 相关
+.mvn/
+mvnw
+mvnw.cmd
+
+# Gradle 相关
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# IDE 相关
+.project
+.classpath
+.settings/
+*.iml
+*.ipr
+*.iws
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# 操作系统缓存
+.DS_Store
+Thumbs.db 
