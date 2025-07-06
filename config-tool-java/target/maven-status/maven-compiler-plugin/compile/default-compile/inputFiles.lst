@@ -9,6 +9,7 @@ E:\code\editPath\config-tool-java\src\main\java\com\configtool\model\ConfigItem.
 E:\code\editPath\config-tool-java\src\main\java\com\configtool\model\ApplyChangesRequest.java
 E:\code\editPath\config-tool-java\src\main\java\com\configtool\model\PreCheckIssue.java
 E:\code\editPath\config-tool-java\src\main\java\com\configtool\service\FileProcessor.java
+E:\code\editPath\config-tool-java\src\main\java\com\configtool\utils\DFMEncryption.java
 E:\code\editPath\config-tool-java\src\main\java\com\configtool\util\JsonUtil.java
 E:\code\editPath\config-tool-java\src\main\java\com\configtool\model\MatchResult.java
 E:\code\editPath\config-tool-java\src\main\java\com\configtool\model\FileTarget.java

@@ -120,6 +120,36 @@
         }
       ],
       "currentValue": "useriiii"
+    },
+    {
+      "id": null,
+      "name": "数据库密码",
+      "description": "",
+      "defaultValue": null,
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\server.conf",
+          "lineNumber": 12,
+          "prefix": "DatabasePassword =",
+          "suffix": ""
+        },
+        {
+          "id": "passed",
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 19,
+          "prefix": "password =",
+          "suffix": ""
+        },
+        {
+          "id": "passed",
+          "filePath": "{{RELATIVE}}\\test-configs\\settings.xml",
+          "lineNumber": 31,
+          "prefix": "<password>",
+          "suffix": "</password>"
+        }
+      ],
+      "currentValue": "password123"
     }
   ]
 } 

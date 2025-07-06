@@ -1,5 +1,6 @@
 package com.configtool.controller;
 
+import com.configtool.config.EnvironmentConfig;
 import com.configtool.model.*;
 import com.configtool.service.ConfigService;
 import com.configtool.service.FileProcessor;
@@ -229,6 +230,28 @@ public class AppController {
         } catch (Exception e) {
             logger.error("生成DFM配置模板失败", e);
             ApiResponse<Object> response = ApiResponse.error("生成DFM配置模板失败: " + e.getMessage());
+            return JsonUtil.toJson(response);
+        }
+    }
+    
+    /**
+     * 刷新配置数据
+     * 重新读取环境变量配置等
+     */
+    public String refreshConfigData() {
+        try {
+            logger.info("开始刷新配置数据");
+            
+            // 刷新环境变量配置
+            EnvironmentConfig.refreshEnvVars();
+            
+            logger.info("配置数据刷新成功");
+            ApiResponse<String> response = ApiResponse.success("配置数据已刷新");
+            return JsonUtil.toJson(response);
+            
+        } catch (Exception e) {
+            logger.error("刷新配置数据失败", e);
+            ApiResponse<Object> response = ApiResponse.error("刷新配置数据失败: " + e.getMessage());
             return JsonUtil.toJson(response);
         }
     }

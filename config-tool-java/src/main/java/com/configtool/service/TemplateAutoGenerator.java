@@ -3,6 +3,7 @@ package com.configtool.service;
 import com.configtool.config.EnvironmentConfig;
 import com.configtool.model.ConfigItem;
 import com.configtool.model.FileTarget;
+import com.configtool.model.MatchResult;
 import com.configtool.model.Template;
 import com.configtool.util.JsonUtil;
 import com.fasterxml.uuid.Generators;
@@ -309,13 +310,21 @@ public class TemplateAutoGenerator {
             List<FileTarget> validTargets = new ArrayList<>();
             for (FileTarget target : item.getTargets()) {
                 // 注意：totalTargets已经在环境变量过滤阶段统计过了
+                String originalPath = target.getFilePath();
                 
                 if (isValidTargetAfterPathReplacement(target)) {
+                    // 先处理目标点（解析路径、搜索匹配项等）
                     processFileTarget(target);
-                    validTargets.add(target);
-                    this.validTargets++;
+                    
+                    // 再检查处理后的目标点是否真正有效
+                    if (isTargetValidAfterProcessing(target, originalPath)) {
+                        validTargets.add(target);
+                        this.validTargets++;
+                    } else {
+                        logger.info("跳过处理后无效的目标点: {}", originalPath);
+                    }
                 } else {
-                    logger.info("跳过无效目标点: {}", target.getFilePath());
+                    logger.info("跳过无效目标点: {}", originalPath);
                 }
             }
             
@@ -326,29 +335,42 @@ public class TemplateAutoGenerator {
         logger.info("模板配置项处理完成");
     }
     
-    /**
-     * 判断目标点是否有效（路径替换后）
+        /**
+     * 判断目标点是否有效（路径替换和匹配搜索后）
      */
     private boolean isValidTargetAfterPathReplacement(FileTarget target) {
         String originalPath = target.getFilePath();
         if (originalPath == null || originalPath.isEmpty()) {
             return false;
         }
-        
+
         // 尝试解析路径
         String resolvedPath = resolvePath(originalPath);
-        
+
         // 如果路径解析失败（仍包含未解析的标记），则无效
         if (resolvedPath.contains("{{") || resolvedPath.contains("}}")) {
             String reason = extractUnresolvedMarkers(resolvedPath);
             skippedPaths.add(originalPath + " (原因: " + reason + ")");
             return false;
         }
-        
+
         // 验证解析后的路径是否存在
         File targetFile = new File(resolvedPath);
         if (!targetFile.exists()) {
             skippedPaths.add(originalPath + " (原因: 文件不存在)");
+            return false;
+        }
+
+        return true;
+    }
+    
+    /**
+     * 在处理后检查目标点是否真正有效（包含匹配搜索结果）
+     */
+    private boolean isTargetValidAfterProcessing(FileTarget target, String originalPath) {
+        // 检查行号是否有效（行号为0表示搜索失败）
+        if (target.getLineNumber() <= 0) {
+            skippedPaths.add(originalPath + " (原因: 未找到匹配项)");
             return false;
         }
         
@@ -370,7 +392,7 @@ public class TemplateAutoGenerator {
         return String.join(", ", markers);
     }
     
-    /**
+        /**
      * 处理单个文件目标点
      */
     private void processFileTarget(FileTarget target) {
@@ -378,18 +400,46 @@ public class TemplateAutoGenerator {
         if (originalPath == null || originalPath.isEmpty()) {
             return;
         }
-        
+
         // 解析路径模板
         String resolvedPath = resolvePath(originalPath);
         target.setFilePath(resolvedPath);
-        
-        // 自动检测行号
-        if (target.getLineNumber() <= 0) {
-            int detectedLineNumber = autoDetectLineNumber(resolvedPath, target.getPrefix());
-            target.setLineNumber(detectedLineNumber);
+
+        // 重新搜索匹配项并更新目标点信息
+        updateTargetWithMatchedResults(target, originalPath, resolvedPath);
+    }
+    
+    /**
+     * 根据搜索结果更新目标点信息
+     */
+    private void updateTargetWithMatchedResults(FileTarget target, String originalPath, String resolvedPath) {
+        try {
+            // 使用FileProcessor在实际文件中搜索匹配项
+            List<MatchResult> matches = fileProcessor.findMatches(resolvedPath, target.getPrefix(), target.getSuffix());
+            
+            if (matches.isEmpty()) {
+                // 没有找到匹配项，设置无效行号
+                target.setLineNumber(0);
+                logger.warn("未找到匹配项: {} -> {} (前缀: {})", originalPath, resolvedPath, target.getPrefix());
+            } else {
+                // 找到匹配项，使用第一个匹配项（通常一个文件只有一个匹配项）
+                MatchResult firstMatch = matches.get(0);
+                target.setLineNumber(firstMatch.getLineNumber());
+                
+                if (matches.size() > 1) {
+                    logger.info("找到多个匹配项({}个)，使用第一个: {} -> {} (行号: {})", 
+                              matches.size(), originalPath, resolvedPath, firstMatch.getLineNumber());
+                } else {
+                    logger.info("找到匹配项: {} -> {} (行号: {})", 
+                              originalPath, resolvedPath, firstMatch.getLineNumber());
+                }
+            }
+            
+        } catch (Exception e) {
+            // 搜索过程中出现异常，设置无效行号
+            target.setLineNumber(0);
+            logger.error("搜索匹配项时出现异常: {} -> {}", originalPath, resolvedPath, e);
         }
-        
-        logger.info("处理文件目标: {} -> {} (行号: {})", originalPath, resolvedPath, target.getLineNumber());
     }
     
     /**
@@ -531,8 +581,9 @@ public class TemplateAutoGenerator {
     }
     
     /**
-     * 自动检测行号
+     * 自动检测行号（已废弃，使用动态搜索机制替代）
      */
+    @Deprecated
     private int autoDetectLineNumber(String filePath, String prefix) {
         if (prefix == null || prefix.isEmpty()) {
             return 1; // 默认第一行

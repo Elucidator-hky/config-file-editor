@@ -2,6 +2,7 @@ package com.configtool.service;
 
 import com.configtool.model.FileTarget;
 import com.configtool.model.MatchResult;
+import com.configtool.utils.DFMEncryption;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -238,7 +239,7 @@ public class FileProcessor {
             
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
-                if (line.contains(prefix)) {
+                if (findPrefixIndex(line, prefix) != -1) {
                     // 如果没有指定suffix，或者suffix为空，或者line包含suffix
                     if (suffix == null || suffix.isEmpty() || line.contains(suffix)) {
                         results.add(new MatchResult(i + 1, line)); // 行号从1开始
@@ -254,6 +255,14 @@ public class FileProcessor {
         }
         
         return results;
+    }
+    
+    /**
+     * 查找前缀位置（精确匹配）
+     * 规则：完全匹配用户输入的前缀，包括空格
+     */
+    private int findPrefixIndex(String line, String prefix) {
+        return line.indexOf(prefix);
     }
 
     /**
@@ -281,8 +290,8 @@ public class FileProcessor {
             String prefix = target.getPrefix();
             String suffix = target.getSuffix();
             
-            // 查找前缀位置
-            int prefixIndex = line.indexOf(prefix);
+            // 查找前缀位置（支持空格匹配）
+            int prefixIndex = findPrefixIndex(line, prefix);
             if (prefixIndex == -1) {
                 return "前缀未找到";
             }
@@ -322,6 +331,13 @@ public class FileProcessor {
                 throw new RuntimeException("文件不存在: " + cleanedPath);
             }
             
+            // 检查是否需要DFM加密处理
+            String processedValue = newValue;
+            if ("passed".equals(target.getId())) {
+                processedValue = DFMEncryption.encrypt(newValue);
+                logger.info("DFM加密处理完成: target.id={}", target.getId());
+            }
+            
             // 检测文件编码
             Charset fileEncoding = detectFileEncoding(file);
             List<String> lines = FileUtils.readLines(file, fileEncoding);
@@ -335,8 +351,8 @@ public class FileProcessor {
             String prefix = target.getPrefix();
             String suffix = target.getSuffix();
             
-            // 查找前缀位置
-            int prefixIndex = line.indexOf(prefix);
+            // 查找前缀位置（支持空格匹配）
+            int prefixIndex = findPrefixIndex(line, prefix);
             if (prefixIndex == -1) {
                 throw new RuntimeException("前缀未找到: " + prefix);
             }
@@ -352,8 +368,9 @@ public class FileProcessor {
                 }
             }
             
-            // 构建新行
-            String newLine = line.substring(0, startIndex) + newValue;
+            // 构建新行，直接拼接，保持前缀原有格式
+            String newLine = line.substring(0, startIndex) + processedValue;
+            
             if (suffix != null && !suffix.isEmpty() && endIndex < line.length()) {
                 newLine += line.substring(endIndex);
             }
