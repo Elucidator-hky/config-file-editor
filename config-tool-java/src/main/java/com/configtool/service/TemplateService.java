@@ -246,4 +246,127 @@ public class TemplateService {
         File file = new File(TEMPLATES_DIR + templateId + ".json");
         return file.exists();
     }
+    
+    /**
+     * 清理指定类型的模板
+     */
+    public void clearTemplatesByType(String appType) {
+        List<Template> templates = getAllTemplates();
+        String templateNamePattern = appType.toUpperCase() + "配置";
+        
+        int deletedCount = 0;
+        for (Template template : templates) {
+            if (template.getName() != null && template.getName().contains(templateNamePattern)) {
+                boolean deleted = deleteTemplate(template.getId());
+                if (deleted) {
+                    deletedCount++;
+                    logger.info("清理模板: {}", template.getName());
+                }
+            }
+        }
+        
+        logger.info("清理完成，删除了 {} 个{}类型的模板", deletedCount, appType.toUpperCase());
+    }
+    
+    /**
+     * 清理所有模板
+     */
+    public void clearAllTemplates() {
+        File dir = new File(TEMPLATES_DIR);
+        
+        if (!dir.exists()) {
+            logger.warn("模板目录不存在: {}", dir.getAbsolutePath());
+            return;
+        }
+        
+        File[] files = dir.listFiles((d, name) -> name.endsWith(".json"));
+        if (files == null) {
+            logger.info("模板目录为空");
+            return;
+        }
+        
+        int deletedCount = 0;
+        for (File file : files) {
+            if (file.delete()) {
+                deletedCount++;
+                logger.info("删除模板文件成功: {}", file.getName());
+            } else {
+                logger.error("删除模板文件失败: {}", file.getName());
+            }
+        }
+        
+        logger.info("清理完成，删除了 {} 个模板", deletedCount);
+    }
+    
+    /**
+     * 从指定文件路径读取模板
+     */
+    public Template getTemplateFromFile(String fileName) {
+        try {
+            File file = new File(fileName);
+            if (!file.exists()) {
+                logger.warn("模板文件不存在: {}", file.getAbsolutePath());
+                return null;
+            }
+            
+            String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            Template template = JsonUtil.fromJson(json, Template.class);
+            
+            // 确保items不为null
+            if (template.getItems() == null) {
+                template.setItems(new ArrayList<>());
+            }
+            
+            // 确保每个target都有ID
+            for (ConfigItem item : template.getItems()) {
+                if (item.getId() == null) {
+                    item.setId(Generators.randomBasedGenerator().generate().toString());
+                }
+                
+                if (item.getTargets() != null) {
+                    for (FileTarget target : item.getTargets()) {
+                        if (target.getId() == null) {
+                            target.setId(Generators.randomBasedGenerator().generate().toString());
+                        }
+                    }
+                }
+            }
+            
+            logger.info("从文件读取模板成功: {} -> {}", fileName, template.getName());
+            return template;
+            
+        } catch (IOException e) {
+            logger.error("读取模板文件失败: {}", fileName, e);
+            throw new RuntimeException("读取模板文件失败: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 保存模板到指定文件路径
+     */
+    public void saveTemplateToFile(Template template, String fileName) {
+        try {
+            // 确保items不为null
+            if (template.getItems() == null) {
+                template.setItems(new ArrayList<>());
+            }
+            
+            String json = JsonUtil.toJson(template);
+            File file = new File(fileName);
+            
+            // 确保目录存在
+            File parentDir = file.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            
+            FileUtils.writeStringToFile(file, json, StandardCharsets.UTF_8);
+            
+            logger.info("保存模板到文件成功: {} -> {}", template.getName(), file.getAbsolutePath());
+            
+        } catch (IOException e) {
+            logger.error("保存模板到文件失败: {} -> {}", template.getName(), fileName, e);
+            throw new RuntimeException("保存模板到文件失败: " + e.getMessage());
+        }
+    }
 } 

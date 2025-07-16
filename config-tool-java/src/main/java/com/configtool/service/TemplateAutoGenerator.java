@@ -36,15 +36,28 @@ public class TemplateAutoGenerator {
     private int totalTargets = 0;
     private int validTargets = 0;
     
+    // 当前应用类型
+    private String appType = "dfm";
+    
     public TemplateAutoGenerator() {
         this.fileProcessor = new FileProcessor();
     }
     
+    public TemplateAutoGenerator(String appType) {
+        this.fileProcessor = new FileProcessor();
+        this.appType = appType != null ? appType.toLowerCase() : "dfm";
+    }
+    
     /**
-     * 生成DFM配置模板
+     * 生成配置模板（根据appType生成对应类型）
      */
-    public Template generateDfmTemplate() {
+    public Template generateTemplate() {
         try {
+            String templateType = appType.toUpperCase();
+            logger.info("========================================");
+            logger.info("开始生成{}配置模板", templateType);
+            logger.info("========================================");
+            
             // 重置统计信息
             resetStatistics();
             
@@ -75,13 +88,23 @@ public class TemplateAutoGenerator {
             // 8. 记录生成结果
             logGenerationResult(generatedTemplate);
             
+            logger.info("{}配置模板生成完成", templateType);
             return generatedTemplate;
             
         } catch (Exception e) {
-            logger.error("生成DFM配置模板失败", e);
-            throw new RuntimeException("生成DFM配置模板失败: " + e.getMessage());
+            logger.error("生成{}配置模板失败", appType.toUpperCase(), e);
+            throw new RuntimeException("生成" + appType.toUpperCase() + "配置模板失败: " + e.getMessage());
         }
     }
+    
+    /**
+     * 生成DFM配置模板（向下兼容）
+     */
+    public Template generateDfmTemplate() {
+        return generateTemplate();
+    }
+    
+
     
     /**
      * 重置统计信息
@@ -269,27 +292,36 @@ public class TemplateAutoGenerator {
     }
     
     /**
-     * 加载半成品模板
+     * 加载半成品模板（根据appType选择文件）
      */
     private Template loadSkeletonTemplate() {
-        String skeletonPath = EnvironmentConfig.SKELETON_TEMPLATES_DIR + EnvironmentConfig.DFM_SKELETON_TEMPLATE;
+        String skeletonFileName;
+        if ("kmvue".equals(appType)) {
+            skeletonFileName = EnvironmentConfig.KMVUE_SKELETON_TEMPLATE;
+        } else {
+            skeletonFileName = EnvironmentConfig.DFM_SKELETON_TEMPLATE;
+        }
+        
+        String skeletonPath = EnvironmentConfig.SKELETON_TEMPLATES_DIR + skeletonFileName;
         File skeletonFile = new File(skeletonPath);
         
         if (!skeletonFile.exists()) {
-            logger.warn("半成品模板文件不存在: {}", skeletonFile.getAbsolutePath());
+            logger.warn("{}半成品模板文件不存在: {}", appType.toUpperCase(), skeletonFile.getAbsolutePath());
             return null;
         }
         
         try {
             String content = FileUtils.readFileToString(skeletonFile, StandardCharsets.UTF_8);
             Template template = JsonUtil.fromJson(content, Template.class);
-            logger.info("成功加载半成品模板: {}", skeletonFile.getAbsolutePath());
+            logger.info("成功加载{}半成品模板: {}", appType.toUpperCase(), skeletonFile.getAbsolutePath());
             return template;
         } catch (IOException e) {
-            logger.error("读取半成品模板失败: {}", skeletonFile.getAbsolutePath(), e);
+            logger.error("读取{}半成品模板失败: {}", appType.toUpperCase(), skeletonFile.getAbsolutePath(), e);
             return null;
         }
     }
+    
+
     
     /**
      * 处理模板中的所有配置项（替换占位符、过滤无效目标点、自动检测行号）
@@ -301,27 +333,31 @@ public class TemplateAutoGenerator {
         
         logger.info("开始处理模板配置项...");
         
+        List<ConfigItem> validItems = new ArrayList<>();
+        
         for (ConfigItem item : template.getItems()) {
             if (item.getTargets() == null) {
                 continue;
             }
             
-            // 过滤并处理有效的目标点
+            // 先处理目标点（解析路径、搜索匹配项等）
             List<FileTarget> validTargets = new ArrayList<>();
             for (FileTarget target : item.getTargets()) {
                 // 注意：totalTargets已经在环境变量过滤阶段统计过了
                 String originalPath = target.getFilePath();
                 
                 if (isValidTargetAfterPathReplacement(target)) {
-                    // 先处理目标点（解析路径、搜索匹配项等）
-                    processFileTarget(target);
+                    // 处理目标点（解析路径、搜索匹配项等）
+                    List<FileTarget> processedTargets = processFileTargetWithMultipleMatches(target);
                     
-                    // 再检查处理后的目标点是否真正有效
-                    if (isTargetValidAfterProcessing(target, originalPath)) {
-                        validTargets.add(target);
+                    // 检查处理后的目标点是否真正有效
+                    for (FileTarget processedTarget : processedTargets) {
+                        if (isTargetValidAfterProcessing(processedTarget, originalPath)) {
+                            validTargets.add(processedTarget);
                         this.validTargets++;
                     } else {
                         logger.info("跳过处理后无效的目标点: {}", originalPath);
+                        }
                     }
                 } else {
                     logger.info("跳过无效目标点: {}", originalPath);
@@ -330,9 +366,88 @@ public class TemplateAutoGenerator {
             
             // 更新配置项的目标点列表，只保留有效的
             item.setTargets(validTargets);
+            
+            // 如果配置项有有效的目标点，则保留该配置项
+            if (!validTargets.isEmpty()) {
+                                  validItems.add(item);
+                  
+                  // 暂时不处理defaultValue，稍后统一处理
+                  
+                  // 清空currentValue字段，确保生成的是半成品模板
+                  item.setCurrentValue(null);
+                logger.debug("清空配置项currentValue字段: {}", item.getName());
+            } else {
+                logger.info("删除无目标点的配置项: {} (原因: 没有有效的目标点)", item.getName());
+            }
         }
         
-        logger.info("模板配置项处理完成");
+                  // 更新模板的配置项列表，只保留有有效目标点的配置项
+          template.setItems(validItems);
+          
+          // 跳过默认值应用，避免文件修改影响配置项识别
+          logger.info("跳过默认值应用，保持原始文件状态");
+          
+          logger.info("模板配置项处理完成");
+    }
+    
+    /**
+     * 处理配置项默认值中的占位符
+     */
+    private void processDefaultValue(ConfigItem item) {
+        String defaultValue = item.getDefaultValue();
+        if (defaultValue == null || defaultValue.isEmpty()) {
+            return;
+        }
+        
+        // 如果默认值包含占位符，需要解析
+        if (defaultValue.contains("{{") && defaultValue.contains("}}")) {
+            String originalDefaultValue = defaultValue;
+            String resolvedDefaultValue = resolvePath(defaultValue);
+            
+            // 如果解析成功（不再包含占位符），则应用到所有有效目标点
+            if (!resolvedDefaultValue.contains("{{") && !resolvedDefaultValue.contains("}}")) {
+                applyDefaultValueToTargets(item, resolvedDefaultValue);
+                item.setDefaultValue(null); // 清空默认值，避免阻塞用户修改
+                logger.info("处理配置项默认值占位符: {} -> {} (已应用到目标点并清空默认值)", originalDefaultValue, resolvedDefaultValue);
+            } else {
+                logger.warn("配置项默认值占位符解析失败: {} -> {}", originalDefaultValue, resolvedDefaultValue);
+            }
+        } else {
+            // 普通默认值，直接应用到所有有效目标点
+            applyDefaultValueToTargets(item, defaultValue);
+            item.setDefaultValue(null); // 清空默认值，避免阻塞用户修改
+            logger.info("应用配置项默认值: {} -> {} (已应用到目标点并清空默认值)", item.getName(), defaultValue);
+        }
+    }
+    
+    /**
+     * 将默认值应用到配置项的所有有效目标点
+     */
+    private void applyDefaultValueToTargets(ConfigItem item, String defaultValue) {
+        if (item.getTargets() == null || item.getTargets().isEmpty()) {
+            return;
+        }
+        
+        int successCount = 0;
+        int failCount = 0;
+        
+        for (FileTarget target : item.getTargets()) {
+            try {
+                // 只对有效的目标点应用默认值（行号大于0表示有效）
+                if (target.getLineNumber() > 0) {
+                    fileProcessor.applyChange(target, defaultValue);
+                    successCount++;
+                    logger.debug("成功应用默认值到目标点: {} -> {}", target.getId(), defaultValue);
+                } else {
+                    logger.debug("跳过无效目标点: {}", target.getId());
+                }
+            } catch (Exception e) {
+                failCount++;
+                logger.error("应用默认值失败: target={}, value={}, error={}", target.getId(), defaultValue, e.getMessage());
+            }
+        }
+        
+        logger.info("配置项 {} 默认值应用完成: 成功 {} 个，失败 {} 个", item.getName(), successCount, failCount);
     }
     
         /**
@@ -390,6 +505,75 @@ public class TemplateAutoGenerator {
         }
         
         return String.join(", ", markers);
+    }
+    
+        /**
+     * 处理单个文件目标点，支持多个匹配项
+     */
+    private List<FileTarget> processFileTargetWithMultipleMatches(FileTarget target) {
+        List<FileTarget> results = new ArrayList<>();
+        String originalPath = target.getFilePath();
+        if (originalPath == null || originalPath.isEmpty()) {
+            results.add(target);
+            return results;
+        }
+
+        // 解析路径模板
+        String resolvedPath = resolvePath(originalPath);
+        
+        try {
+            // 使用FileProcessor在实际文件中搜索匹配项
+            List<MatchResult> matches = fileProcessor.findMatches(resolvedPath, target.getPrefix(), target.getSuffix());
+            
+            if (matches.isEmpty()) {
+                // 没有找到匹配项，设置无效行号
+                target.setFilePath(resolvedPath);
+                target.setLineNumber(0);
+                results.add(target);
+                logger.warn("未找到匹配项: {} -> {} (前缀: {})", originalPath, resolvedPath, target.getPrefix());
+            } else {
+                // 找到匹配项，为每个匹配项创建一个目标点
+                for (int i = 0; i < matches.size(); i++) {
+                    MatchResult match = matches.get(i);
+                    FileTarget newTarget;
+                    
+                    if (i == 0) {
+                        // 第一个匹配项使用原始目标点
+                        newTarget = target;
+                    } else {
+                        // 后续匹配项创建新的目标点
+                        newTarget = new FileTarget(
+                            target.getId() + "_" + (i + 1),
+                            target.getFilePath(),
+                            target.getLineNumber(),
+                            target.getPrefix(),
+                            target.getSuffix()
+                        );
+                    }
+                    
+                    newTarget.setFilePath(resolvedPath);
+                    newTarget.setLineNumber(match.getLineNumber());
+                    results.add(newTarget);
+                }
+                
+                StringBuilder lineNumbers = new StringBuilder();
+                for (int i = 0; i < matches.size(); i++) {
+                    if (i > 0) lineNumbers.append(", ");
+                    lineNumbers.append(matches.get(i).getLineNumber());
+                }
+                logger.info("找到{}个匹配项: {} -> {} (行号: {})", 
+                          matches.size(), originalPath, resolvedPath, lineNumbers.toString());
+            }
+            
+        } catch (Exception e) {
+            // 搜索过程中出现异常，设置无效行号
+            target.setFilePath(resolvedPath);
+            target.setLineNumber(0);
+            results.add(target);
+            logger.error("搜索匹配项时出现异常: {} -> {}", originalPath, resolvedPath, e);
+        }
+        
+        return results;
     }
     
         /**
@@ -622,8 +806,9 @@ public class TemplateAutoGenerator {
      * 记录生成结果
      */
     private void logGenerationResult(Template template) {
+        String templateType = appType.toUpperCase();
         StringBuilder result = new StringBuilder();
-        result.append("\n========== DFM配置模板生成完成 ==========\n");
+        result.append(String.format("\n========== %s配置模板生成完成 ==========\n", templateType));
         result.append(String.format("✅ 成功生成模板: %s\n", template.getName()));
         result.append(String.format("📊 统计信息: 总计 %d 个目标点，成功 %d 个\n", totalTargets, validTargets));
         
@@ -658,17 +843,11 @@ public class TemplateAutoGenerator {
         // 生成新的模板ID
         template.setId(Generators.timeBasedGenerator().generate().toString());
         
-        // 生成新的模板名称
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timestamp = sdf.format(new Date());
-        template.setName("DFM配置模板 - " + timestamp);
+        // 生成新的模板名称 - 简化版本
+        String templateType = appType.toUpperCase();
+        template.setName(templateType + "配置修改");
         
-        // 更新描述，包含统计信息
-        String description = String.format("自动生成的DFM配置模板，基于当前环境路径解析。成功处理 %d/%d 个目标点", 
-                validTargets, totalTargets);
-        if (!skippedEnvVars.isEmpty()) {
-            description += "，跳过环境变量: " + String.join(", ", skippedEnvVars);
-        }
-        template.setDescription(description);
+        // 简化描述
+        template.setDescription("");
     }
 } 

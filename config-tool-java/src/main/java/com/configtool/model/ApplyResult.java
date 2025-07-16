@@ -14,9 +14,11 @@ public class ApplyResult {
     private int failureCount;
     private List<TargetResult> results;
     private String summary;
+    private List<String> nacosResults; // Nacos同步结果
 
     public ApplyResult() {
         this.results = new ArrayList<>();
+        this.nacosResults = new ArrayList<>();
     }
 
     public ApplyResult(int totalTargets) {
@@ -73,6 +75,14 @@ public class ApplyResult {
         this.summary = summary;
     }
 
+    public List<String> getNacosResults() {
+        return nacosResults;
+    }
+
+    public void setNacosResults(List<String> nacosResults) {
+        this.nacosResults = nacosResults;
+    }
+
     // 便利方法
     public void addResult(TargetResult result) {
         if (this.results == null) {
@@ -87,6 +97,13 @@ public class ApplyResult {
         }
         
         updateSummary();
+    }
+
+    public void addNacosResult(String result) {
+        if (this.nacosResults == null) {
+            this.nacosResults = new ArrayList<>();
+        }
+        this.nacosResults.add(result);
     }
 
     private void updateSummary() {

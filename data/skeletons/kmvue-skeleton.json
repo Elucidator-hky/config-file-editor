@@ -1,0 +1,166 @@
+{
+  "id": "kmvue-skeleton-template",
+  "name": "KMVUE配置模板(半成品)",
+  "description": "KMVUE配置半成品模板，包含常见的配置项定义",
+  "items": [
+    {
+      "id": null,
+      "name": "MYSQL数据库IP",
+      "description": "",
+      "defaultValue": "127.0.0.1",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 15,
+          "prefix": "host \u003d",
+          "suffix": null
+        },
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\server.conf",
+          "lineNumber": 8,
+          "prefix": "DatabaseHost \u003d",
+          "suffix": ""
+        },
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\settings.xml",
+          "lineNumber": 27,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        },
+        {
+          "id": null,
+          "filePath": "{{ENV:mysql}}\\data\\test.xml",
+          "lineNumber": 27,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        },
+        {
+          "id": null,
+          "filePath": "{{ENV:JAVA_HOME}}\\test.ini",
+          "lineNumber": 15,
+          "prefix": "host \u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "127.0.0.1"
+    },
+    {
+      "id": null,
+      "name": "数据库名称",
+      "description": "",
+      "defaultValue": "kmvue_db",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\settings.xml",
+          "lineNumber": 29,
+          "prefix": "\u003cschema\u003e",
+          "suffix": "\u003c/schema\u003e"
+        },
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\server.conf",
+          "lineNumber": 10,
+          "prefix": "DatabaseName \u003d",
+          "suffix": ""
+        },
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 17,
+          "prefix": "name \u003d",
+          "suffix": ""
+        },
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\config.json",
+          "lineNumber": 26,
+          "prefix": "\"database\": \"",
+          "suffix": "\","
+        }
+      ],
+      "currentValue": "kmvue_db"
+    },
+    {
+      "id": null,
+      "name": "数据库用户名",
+      "description": "",
+      "defaultValue": "kmvue_user",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\app.yaml",
+          "lineNumber": 31,
+          "prefix": "username: \"",
+          "suffix": "\""
+        }
+      ],
+      "currentValue": "kmvue_user"
+    },
+    {
+      "id": null,
+      "name": "数据库密码",
+      "description": "",
+      "defaultValue": "kmvue_pass",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\server.conf",
+          "lineNumber": 12,
+          "prefix": "DatabasePassword =",
+          "suffix": ""
+        },
+        {
+          "id": "passed",
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 19,
+          "prefix": "password =",
+          "suffix": ""
+        },
+        {
+          "id": "passed",
+          "filePath": "{{RELATIVE}}\\test-configs\\settings.xml",
+          "lineNumber": 31,
+          "prefix": "<password>",
+          "suffix": "</password>"
+        }
+      ],
+      "currentValue": "kmvue_pass"
+    },
+    {
+      "id": null,
+      "name": "KMVUE服务端口",
+      "description": "",
+      "defaultValue": "8080",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 5,
+          "prefix": "port=",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "8080"
+    },
+    {
+      "id": null,
+      "name": "KMVUE安装路径",
+      "description": "KMVUE系统的安装目录路径",
+      "defaultValue": "D:\\KMVUE",
+      "targets": [
+        {
+          "id": "convertPath",
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 7,
+          "prefix": "install_path=",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "D:\\KMVUE"
+    }
+  ]
+} 

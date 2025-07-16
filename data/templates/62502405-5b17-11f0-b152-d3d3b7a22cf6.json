@@ -1,0 +1,187 @@
+{
+  "id": "62502405-5b17-11f0-b152-d3d3b7a22cf6",
+  "name": "KMVUE配置模板 - 2025-07-07 17:47:24",
+  "description": "自动生成的KMVUE配置模板，基于当前环境路径解析。",
+  "items": [
+    {
+      "id": null,
+      "name": "MYSQL数据库IP",
+      "description": "",
+      "defaultValue": null,
+      "targets": [
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 9,
+          "prefix": "host \u003d",
+          "suffix": null
+        },
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 9,
+          "prefix": "DatabaseHost \u003d",
+          "suffix": ""
+        },
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 27,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        },
+        {
+          "id": "null_2",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 35,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        },
+        {
+          "id": null,
+          "filePath": "D:\\KMVue\\mysql-8.0.22\\data\\test.xml",
+          "lineNumber": 27,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        },
+        {
+          "id": "null_2",
+          "filePath": "D:\\KMVue\\mysql-8.0.22\\data\\test.xml",
+          "lineNumber": 35,
+          "prefix": "\u003chost\u003e",
+          "suffix": "\u003c/host\u003e"
+        }
+      ],
+      "currentValue": "127.0.0.1",
+      "status": null
+    },
+    {
+      "id": null,
+      "name": "数据库名称",
+      "description": "",
+      "defaultValue": null,
+      "targets": [
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 29,
+          "prefix": "\u003cschema\u003e",
+          "suffix": "\u003c/schema\u003e"
+        },
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 11,
+          "prefix": "DatabaseName \u003d",
+          "suffix": ""
+        },
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 2,
+          "prefix": "name \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "null_2",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 18,
+          "prefix": "name \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "null_3",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 19,
+          "prefix": "name \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "null_4",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 41,
+          "prefix": "name \u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "kmvue_db",
+      "status": null
+    },
+    {
+      "id": null,
+      "name": "数据库用户名",
+      "description": "",
+      "defaultValue": null,
+      "targets": [
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 31,
+          "prefix": "username: \"",
+          "suffix": "\""
+        },
+        {
+          "id": "null_2",
+          "filePath": "E:\\code\\editPath\\test-configs\\app.yaml",
+          "lineNumber": 66,
+          "prefix": "username: \"",
+          "suffix": "\""
+        }
+      ],
+      "currentValue": "kmvue_user",
+      "status": null
+    },
+    {
+      "id": null,
+      "name": "数据库密码",
+      "description": "",
+      "defaultValue": null,
+      "targets": [
+        {
+          "id": null,
+          "filePath": "E:\\code\\editPath\\test-configs\\server.conf",
+          "lineNumber": 13,
+          "prefix": "DatabasePassword \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "passed",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 20,
+          "prefix": "password \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "passed_2",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 27,
+          "prefix": "password \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "passed_3",
+          "filePath": "E:\\code\\editPath\\test-configs\\application.ini",
+          "lineNumber": 42,
+          "prefix": "password \u003d",
+          "suffix": ""
+        },
+        {
+          "id": "passed",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 31,
+          "prefix": "\u003cpassword\u003e",
+          "suffix": "\u003c/password\u003e"
+        },
+        {
+          "id": "passed_2",
+          "filePath": "E:\\code\\editPath\\test-configs\\settings.xml",
+          "lineNumber": 37,
+          "prefix": "\u003cpassword\u003e",
+          "suffix": "\u003c/password\u003e"
+        }
+      ],
+      "currentValue": "kmvue_pass",
+      "status": null
+    }
+  ]
+}

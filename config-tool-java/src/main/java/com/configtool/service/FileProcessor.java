@@ -331,11 +331,14 @@ public class FileProcessor {
                 throw new RuntimeException("文件不存在: " + cleanedPath);
             }
             
-            // 检查是否需要DFM加密处理
+            // 检查是否需要特殊处理
             String processedValue = newValue;
             if ("passed".equals(target.getId())) {
                 processedValue = DFMEncryption.encrypt(newValue);
                 logger.info("DFM加密处理完成: target.id={}", target.getId());
+            } else if ("convertPath".equals(target.getId())) {
+                processedValue = newValue.replace("\\", "/");
+                logger.info("路径转换处理完成: target.id={}, 原值: {}, 转换后: {}", target.getId(), newValue, processedValue);
             }
             
             // 检测文件编码

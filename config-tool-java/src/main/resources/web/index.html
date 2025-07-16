@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配置文件修改工具</title>
+    <!-- <title>配置文件修改工具</title> -->
     <style>
         /* 基础样式 */
         body {
@@ -114,6 +114,15 @@
 
         .btn-secondary:hover {
             background-color: #545b62;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
         }
 
         /* 模态框样式 - 关键部分 */
@@ -473,6 +482,102 @@
             color: #6c757d;
             font-size: 14px;
             line-height: 1.5;
+        }
+
+        .generated-template-notice {
+            margin: 8px 0 0 0 !important;
+            color: #fd7e14 !important;
+            font-size: 13px !important;
+            font-weight: 500;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 8px 12px;
+        }
+
+        /* 简化模式样式 */
+        .config-item-simple {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+
+        .config-item-simple.status-ok {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+
+        .config-item-simple.status-warning {
+            border-color: #ffc107;
+            background-color: #fffbf0;
+        }
+
+        .config-item-simple.status-error {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .config-item-simple.status-modified {
+            border-color: #fd7e14;
+            background-color: #fff8f0;
+        }
+
+        .config-simple-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .config-label {
+            min-width: 120px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .config-simple-row input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .config-simple-row input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-indicator.status-ok {
+            background-color: #28a745;
+        }
+
+        .status-indicator.status-warning {
+            background-color: #ffc107;
+        }
+
+        .status-indicator.status-error {
+            background-color: #dc3545;
+        }
+
+        .status-indicator.status-modified {
+            background-color: #fd7e14;
+        }
+
+        .status-indicator.status-unknown {
+            background-color: #6c757d;
         }
 
         .btn-small {
@@ -895,6 +1000,14 @@
             background-color: #dc3545;
         }
 
+        .warning-banner {
+            background-color: #ff9800;
+        }
+
+        .info-banner {
+            background-color: #17a2b8;
+        }
+
         /* 调试面板样式 */
         .debug-panel {
             position: fixed;
@@ -943,6 +1056,18 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
+        }
+
+        .loading-spinner-small {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
         }
 
         .loading-text {
@@ -1144,8 +1269,8 @@
 <body>
     <!-- 页面标题 -->
     <div class="header">
-        <h1>配置文件修改工具</h1>
-        <p>轻松管理和修改配置文件的模板化工具</p>
+        <!-- <h1>配置文件修改工具</h1> -->
+        <p></p>
     </div>
 
     <!-- 主容器 -->
@@ -1157,7 +1282,7 @@
                 新建模板
             </button>
             <button class="btn btn-success" id="generateDfmTemplateBtn">
-                生成DFM配置模板
+                生成DFM/KMVUE配置模板
             </button>
             <div id="templateList"></div>
         </div>
@@ -1165,10 +1290,7 @@
         <!-- 右侧工作区 -->
         <div class="main-content">
             <div id="workspace">
-                <div class="empty-state">
-                    <h3>欢迎使用配置文件修改工具</h3>
-                    <p>请在左侧选择一个模板开始配置，或创建新模板</p>
-                </div>
+                <!-- 工作区内容将由JavaScript动态加载 -->
             </div>
         </div>
     </div>
@@ -1290,20 +1412,6 @@
         </div>
     </div>
 
-    <!-- 自定义确认对话框 -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content" style="max-width: 400px;">
-            <div class="modal-header">确认操作</div>
-            <div class="modal-body">
-                <p id="confirmMessage"></p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeConfirmDialog(false)">取消</button>
-                <button class="btn btn-danger" onclick="closeConfirmDialog(true)">确定</button>
-            </div>
-        </div>
-    </div>
-
     <script>
 // 调试：确保JavaScript已加载
 console.log('app.js 开始加载...');
@@ -1324,16 +1432,16 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('没有找到新建模板按钮！');
     }
     
-    // 绑定生成DFM配置模板按钮事件
+    // 绑定生成DFM/KMVUE配置模板按钮事件
     const generateDfmBtn = document.getElementById('generateDfmTemplateBtn');
     if (generateDfmBtn) {
-        console.log('找到生成DFM配置模板按钮，绑定点击事件');
+        console.log('找到生成DFM/KMVUE配置模板按钮，绑定点击事件');
         generateDfmBtn.addEventListener('click', function() {
-            console.log('生成DFM配置模板按钮被点击！');
+            console.log('生成DFM/KMVUE配置模板按钮被点击！');
             generateDfmTemplate();
         });
     } else {
-        console.error('没有找到生成DFM配置模板按钮！');
+        console.error('没有找到生成DFM/KMVUE配置模板按钮！');
     }
     
     // 添加键盘事件监听器，F12键开关调试面板
@@ -1378,6 +1486,22 @@ function showContextMenu(x, y) {
         menu.style.left = x + 'px';
         menu.style.top = y + 'px';
         
+        // 智能显示一键应用按钮
+        const applyBtn = document.getElementById('contextApplyBtn');
+        if (applyBtn) {
+            // 检查是否有可应用的配置项
+            let hasModifiableItems = false;
+            if (currentTemplate && currentTemplate.items && currentTemplateWithStatus && currentTemplateWithStatus.itemStatuses) {
+                currentTemplate.items.forEach(item => {
+                    const status = currentTemplateWithStatus.itemStatuses[item.name];
+                    if (status && (status.status === 'OK' || status.status === 'WARNING' || status.status === 'MODIFIED')) {
+                        hasModifiableItems = true;
+                    }
+                });
+            }
+            applyBtn.style.display = hasModifiableItems ? 'block' : 'none';
+        }
+        
         // 确保菜单不会超出屏幕边界
         const rect = menu.getBoundingClientRect();
         if (rect.right > window.innerWidth) {
@@ -1397,6 +1521,48 @@ function hideContextMenu() {
     }
 }
 
+// 右键菜单一键应用配置
+async function contextMenuApplyChanges() {
+    hideContextMenu();
+    await applyChanges();
+}
+
+// 右键菜单检查Nacos状态
+async function contextMenuCheckNacosStatus() {
+    hideContextMenu();
+    await checkNacosStatus();
+}
+
+// 右键菜单测试Nacos更新
+async function contextMenuTestNacosUpdate() {
+    hideContextMenu();
+    await testNacosUpdate();
+}
+
+// 测试Nacos配置更新
+async function testNacosUpdate() {
+    try {
+        showInfo('正在测试Nacos配置更新...');
+        
+        const resultJSON = await window.javaApp.testNacosUpdate();
+        const result = JSON.parse(resultJSON);
+        
+        if (result.success) {
+            const data = result.data;
+            if (data.updateSuccess) {
+                showSuccess('Nacos配置更新测试成功！');
+            } else {
+                showWarning('Nacos配置更新测试失败！');
+            }
+        } else {
+            showError('测试失败: ' + result.error);
+        }
+    } catch (error) {
+        console.error('测试Nacos配置更新失败:', error);
+        showError('测试失败: ' + error.message);
+    }
+}
+
 // 刷新配置数据
 async function refreshConfigData() {
     hideContextMenu();
@@ -1410,8 +1576,15 @@ async function refreshConfigData() {
         hideLoading();
         
         if (result.success) {
+            
+            // 如果当前有选中的模板，重新加载并渲染
+            if (currentTemplate && currentTemplate.id) {
+                console.log('重新加载当前模板数据...');
+                await selectTemplate(currentTemplate.id);
+            }
             showSuccess(result.data || '配置数据已刷新');
             console.log('配置数据刷新成功');
+            
         } else {
             showError('刷新配置数据失败: ' + result.error);
             console.error('配置数据刷新失败:', result.error);
@@ -1498,12 +1671,141 @@ async function initApp() {
     console.log('应用开始初始化...');
     
     try {
-        await loadTemplates();
+        // 获取应用类型并设置UI模式
+        await initAppTypeAndUI();
+        
         console.log('应用初始化完成');
     } catch (error) {
         console.error('应用初始化失败:', error);
         showError('应用初始化失败: ' + error.message);
     }
+}
+
+// 全局变量 - 运行模式
+let isSimpleMode = false;
+let currentAppType = 'dfm';
+
+// 初始化应用类型和UI
+async function initAppTypeAndUI() {
+    try {
+        // 获取应用类型和启动模式
+        currentAppType = window.javaApp.getAppType().toLowerCase();
+        isSimpleMode = window.javaApp.isParameterMode();
+        
+        console.log('当前应用类型:', currentAppType);
+        console.log('是否为参数启动模式:', isSimpleMode);
+        
+        // 根据启动模式初始化UI
+        if (isSimpleMode) {
+            console.log('进入简化模式');
+            await initSimpleMode();
+        } else {
+            console.log('进入正常模式');
+            await initNormalMode();
+        }
+        
+    } catch (error) {
+        console.error('初始化应用类型和UI失败:', error);
+        // 默认进入正常模式
+        isSimpleMode = false;
+        await initNormalMode();
+    }
+}
+
+// 初始化简化模式（参数启动）
+async function initSimpleMode() {
+    console.log('初始化简化模式...');
+    
+    // 隐藏左侧栏
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+        sidebar.style.display = 'none';
+    }
+    
+    // 调整主内容区域
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.style.marginLeft = '0';
+        mainContent.style.width = '100%';
+    }
+    
+    // 修改标题
+    // const titleElement = document.querySelector('.header h1');
+    // if (titleElement) {
+    //     titleElement.textContent = currentAppType.toUpperCase() + '配置修改';
+    // }
+    
+    // 自动生成并选择对应模板
+    await generateAndSelectTemplate();
+}
+
+// 初始化正常模式
+async function initNormalMode() {
+    console.log('初始化正常模式...');
+    
+    // 设置生成模板按钮的文字
+    const generateBtn = document.getElementById('generateDfmTemplateBtn');
+    if (generateBtn) {
+        generateBtn.textContent = '生成配置模板';
+    }
+    
+    // 加载模板列表
+    await loadTemplates();
+}
+
+// 自动查找并选择模板（简化模式）
+async function generateAndSelectTemplate() {
+    try {
+        console.log('查找现有模板...');
+        
+        // 先加载所有模板
+        await loadTemplates();
+        
+        // 查找匹配的模板
+        const templateNamePattern = currentAppType.toUpperCase() + "配置";
+        const matchedTemplate = templates.find(template => 
+            template.name && (
+                template.name.includes(templateNamePattern) || 
+                template.name.includes(templateNamePattern + "修改") ||
+                template.name.includes(templateNamePattern + "模板")
+            )
+        );
+        
+        if (matchedTemplate) {
+            console.log('找到现有模板:', matchedTemplate.name);
+            // 直接加载这个模板
+            await selectTemplate(matchedTemplate.id);
+        } else {
+            console.log('未找到现有模板，显示初始化提示');
+            showInitializationRequired();
+        }
+        
+    } catch (error) {
+        console.error('查找模板失败:', error);
+        showInitializationRequired();
+    }
+}
+
+// 显示需要初始化的提示（简化模式）
+function showInitializationRequired() {
+    console.log('显示初始化提示，应用类型:', currentAppType);
+    
+    const workspace = document.getElementById('workspace');
+    if (!workspace) {
+        console.error('找不到workspace元素');
+        return;
+    }
+    
+    workspace.innerHTML = `
+        <div class="empty-state" style="text-align: center; padding: 60px 20px;">
+            <h3>需要初始化${currentAppType.toUpperCase()}配置</h3>
+            <p>未找到${currentAppType.toUpperCase()}配置模板</p>
+            <p>请先运行 <strong>init-${currentAppType}.bat</strong> 进行初始化</p>
+            <p>初始化完成后，再使用此工具修改配置</p>
+            <br>
+            <button class="btn btn-success" onclick="window.close()">关闭</button>
+        </div>
+    `;
 }
 
 // 全局变量
@@ -1720,6 +2022,46 @@ function enableAllInteractions() {
     });
 }
 
+// 工具函数：解码Unicode字符
+function decodeUnicodeString(str) {
+    if (!str) return '';
+    try {
+        // 处理JSON中的Unicode转义字符
+        return str.replace(/\\u[\dA-F]{4}/gi, function (match) {
+            return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+        });
+    } catch (e) {
+        console.warn('Unicode解码失败:', str, e);
+        return str;
+    }
+}
+
+// 工具函数：格式化目标点显示
+function formatTargetDisplay(target, detailed = false) {
+    if (!target) return '';
+    
+    const lineNumber = target.lineNumber || 0;
+    // 解码Unicode字符
+    const prefix = decodeUnicodeString(target.prefix || '');
+    const suffix = decodeUnicodeString(target.suffix || '');
+    
+    if (detailed) {
+        // 详细模式：编辑页面使用
+        return `行 ${lineNumber} | 前缀: "${prefix}" ${suffix ? `| 后缀: "${suffix}"` : ''}`;
+    } else {
+        // 简洁模式：主页面使用
+        if (!prefix && !suffix) {
+            return `第${lineNumber}行：(无匹配规则)`;
+        } else if (!prefix) {
+            return `第${lineNumber}行：(无前缀) → ${suffix}`;
+        } else if (!suffix) {
+            return `第${lineNumber}行：${prefix}`;
+        } else {
+            return `第${lineNumber}行：${prefix} → ${suffix}`;
+        }
+    }
+}
+
 // 工具函数：清理文件路径，移除不可见字符
 function cleanFilePath(path) {
     if (!path) return '';
@@ -1747,6 +2089,24 @@ function showError(message) {
     banner.innerHTML = message;
     document.body.insertBefore(banner, document.body.firstChild);
     setTimeout(() => banner.remove(), 5000);
+}
+
+// 显示警告消息
+function showWarning(message) {
+    const banner = document.createElement('div');
+    banner.className = 'warning-banner';
+    banner.innerHTML = message;
+    document.body.insertBefore(banner, document.body.firstChild);
+    setTimeout(() => banner.remove(), 4000);
+}
+
+// 显示信息消息
+function showInfo(message) {
+    const banner = document.createElement('div');
+    banner.className = 'info-banner';
+    banner.innerHTML = message;
+    document.body.insertBefore(banner, document.body.firstChild);
+    setTimeout(() => banner.remove(), 4000);
 }
 
 // 加载模板列表 - 使用Java Bridge调用
@@ -1788,6 +2148,11 @@ function renderTemplateList() {
     }
     
     templates.forEach((template) => {
+        // 过滤掉自动生成的KMVUE配置修改模板
+        if (template.name && template.name.includes('KMVUE配置修改')) {
+            return; // 跳过此模板
+        }
+        
         const div = document.createElement('div');
         div.className = 'template-item';
         if (currentTemplate && currentTemplate.id === template.id) {
@@ -1929,19 +2294,33 @@ function updateTemplateSelection(templateId) {
     });
 }
 
+// 判断是否是生成的模板
+function isGeneratedTemplate(templateName) {
+    if (!templateName) return false;
+    const name = templateName.toLowerCase();
+    return name.includes('dfm配置模板') || 
+           name.includes('kmvue配置模板') || 
+           name.includes('自动生成') || 
+           name.includes('配置模板-') ||
+           name.includes('半成品');
+}
+
 // 渲染工作区
 function renderWorkspace() {
     const workspace = document.getElementById('workspace');
     
-    if (!currentTemplate) {
-        workspace.innerHTML = `
-            <div class="empty-state">
-                <h3>欢迎使用配置文件修改工具</h3>
-                <p>请在左侧选择一个模板开始配置，或创建新模板</p>
-            </div>
-        `;
-        return;
-    }
+    // if (!currentTemplate) {
+    //     workspace.innerHTML = `
+    //         <div class="empty-state">
+    //             <h3>欢迎使用配置文件修改工具</h3>
+    //             <p>请在左侧选择一个模板开始配置，或创建新模板</p>
+    //         </div>
+    //     `;
+    //     return;
+    // }
+
+    // 判断是否是生成的模板
+    const isGenerated = isGeneratedTemplate(currentTemplate.name);
 
     let descHtml = '';
     if (currentTemplate.description && currentTemplate.description.trim()) {
@@ -1954,14 +2333,21 @@ function renderWorkspace() {
                 <h2>${currentTemplate.name}</h2>
                 ${descHtml}
             </div>
+            ${!isGenerated && !isSimpleMode ? `
             <button class="btn btn-primary" data-action="add-config-item">
                 添加配置项
             </button>
+            ` : ''}
         </div>
     `;
 
     if (currentTemplate.items && currentTemplate.items.length > 0) {
         currentTemplate.items.forEach((item, index) => {
+            // 隐藏数据库驱动类型配置项
+            if (item.name === '数据库驱动类型') {
+                return; // 跳过此配置项的渲染
+            }
+            
             // 确保每个配置项都有ID
             if (!item.id) {
                 item.id = 'item_' + Date.now() + '_' + index + '_' + Math.random().toString(36).substr(2, 9);
@@ -2014,9 +2400,9 @@ function renderWorkspace() {
                 statusMessage = '未检查';
             }
 
-            // 生成目标点列表HTML - 默认折叠
+            // 生成目标点列表HTML - 生成模板不显示
             let targetsListHtml = '';
-            if (item.targets && item.targets.length > 0) {
+            if (!isGenerated && item.targets && item.targets.length > 0) {
                 targetsListHtml = `
                     <div class="targets-management">
                         <div class="targets-header" onclick="toggleTargetList('${item.id}')">
@@ -2036,9 +2422,9 @@ function renderWorkspace() {
                             <div class="target-info">
                                 <div class="target-status-indicator ${targetStatus}"></div>
                                 <div class="target-content">
-                                    <span class="target-path">${target.filePath}</span>
-                                    <div class="target-details">
-                                        <div>第${target.lineNumber}行：${target.prefix || '(无前缀)'}</div>
+                                <span class="target-path">${target.filePath}</span>
+                                <div class="target-details">
+                                        <div>${formatTargetDisplay(target)}</div>
                                         <div class="target-status-text">${statusText}</div>
                                     </div>
                                 </div>
@@ -2053,6 +2439,20 @@ function renderWorkspace() {
                 targetsListHtml += '</div></div>';
             }
 
+            // 根据模式选择不同的渲染方式
+            if (isSimpleMode) {
+                // 简化模式：一行显示
+                html += `
+                    <div class="config-item-simple ${statusClass}" data-item-id="${item.id}" data-item-index="${index}">
+                        <div class="config-simple-row">
+                            <label class="config-label" ${item.description ? 'title="' + item.description + '"' : ''}>${item.name}：</label>
+                            ${generateConfigInput(item, index, currentValue || '')}
+                            <span class="status-indicator ${statusClass}" title="${statusMessage}"></span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 正常模式：原有布局
             html += `
                 <div class="config-item-manager ${statusClass}" data-item-id="${item.id}" data-item-index="${index}">
                     <div class="config-item-header">
@@ -2060,33 +2460,34 @@ function renderWorkspace() {
                             <h4>${item.name}</h4>
                             <span class="status-text">${statusMessage}</span>
                         </div>
-                        <div class="config-item-actions">
-                            <button class="btn btn-primary btn-small" data-action="add-target" data-item-id="${item.id}">
-                                新增目标点
-                            </button>
-                            <button class="btn btn-danger btn-small" onclick="deleteConfigItem('${item.id}')">
-                                删除
-                            </button>
-                        </div>
+                            <div class="config-item-actions">
+                            ${!isGenerated ? `
+                        <button class="btn btn-primary btn-small" data-action="add-target" data-item-id="${item.id}">
+                            新增目标点
+                        </button>
+                                <button class="btn btn-danger btn-small" onclick="deleteConfigItem('${item.id}')">
+                                    删除
+                                </button>
+                            ` : ''}
+                            </div>
                     </div>
                     
                     <div class="config-item-content">
+                            ${isGenerated ? '' : `
                         <div class="current-value">
                             当前值: <span class="current-value-text">${currentValue || '未设置'}</span>
                         </div>
-                        <input 
-                            type="text" 
-                            id="item_${index}"
-                            placeholder="输入新值"
-                            value="${currentValue || ''}"
-                            oninput="checkItemModification(${index})"
-                        >
-                        ${item.description && item.description.trim() ? `<small style="color: #6c757d;">${item.description}</small>` : ''}
+                            `}
+                            ${generateConfigInput(item, index, currentValue || '')}
+                            ${item.description && item.description.trim() ? `
+                                <small style="color: #6c757d;" ${isGenerated ? 'title="' + item.description + '"' : ''}>${isGenerated ? '' : item.description}</small>
+                            ` : ''}
                         
                         ${targetsListHtml}
                     </div>
                 </div>
             `;
+            }
         });
 
         // 检查是否有可应用的配置项
@@ -2106,12 +2507,29 @@ function renderWorkspace() {
             });
         }
 
-        // 根据状态显示按钮
+        // 根据模式和状态显示按钮
+        if (isSimpleMode) {
+            // 简化模式：总是显示应用按钮
+            html += `
+                <div style="margin-top: 24px; text-align: center;">
+                    <button class="btn btn-success btn-large" onclick="applyChanges()">
+                        应用配置
+                    </button>
+                    <button class="btn btn-info btn-large" onclick="testDatabaseConnection()" style="margin-left: 10px;">
+                        测试数据库连接
+                    </button>
+                </div>
+            `;
+        } else {
+            // 正常模式：根据状态显示按钮
         if (hasModifiableItems) {
             html += `
                 <div style="margin-top: 32px; text-align: center;">
                     <button class="btn btn-success btn-large" onclick="applyChanges()">
                         应用配置
+                    </button>
+                    <button class="btn btn-info btn-large" onclick="testDatabaseConnection()" style="margin-left: 10px;">
+                        测试数据库连接
                     </button>
                 </div>
             `;
@@ -2121,8 +2539,12 @@ function renderWorkspace() {
                     <button class="btn btn-secondary btn-large" disabled title="没有可应用的配置项">
                         无法应用配置
                     </button>
+                    <button class="btn btn-info btn-large" onclick="testDatabaseConnection()" style="margin-left: 10px;">
+                        测试数据库连接
+                    </button>
                 </div>
             `;
+            }
         }
     } else {
         html += `
@@ -2180,20 +2602,178 @@ function checkTargetStatus(target) {
                     ts.prefix === target.prefix
                 );
                 if (targetStatus) {
-                    return {
+        return {
                         status: targetStatus.status === 'SUCCESS' ? 'found' : 'not-found',
                         text: targetStatus.message || (targetStatus.status === 'SUCCESS' ? '正常' : '异常')
-                    };
+        };
                 }
             }
         }
     }
     
     // 如果没有找到状态信息，返回未知状态
-    return {
-        status: 'unknown',
+        return {
+            status: 'unknown',
         text: '未检查'
-    };
+        };
+    }
+
+// 生成配置输入框
+function generateConfigInput(item, index, currentValue) {
+    // 特殊处理：数据库类型渲染为下拉框
+    if (item.name === '数据库类型') {
+        const sqlServerSelected = currentValue === '0' ? 'selected' : '';
+        const mysqlSelected = currentValue === '9' ? 'selected' : '';
+        
+        return `
+            <select 
+                id="item_${index}"
+                onchange="handleDatabaseTypeChange(${index}); checkItemModification(${index});"
+                style="width: 100%; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 8px; cursor: pointer; background: white; font-size: 14px; height: 46px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.2s ease; outline: none; font-weight: 500;"
+                onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.1)'"
+                onblur="this.style.borderColor='#e1e5e9'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)'"
+            >
+                <option value="0" ${sqlServerSelected}>SQL Server</option>
+                <option value="9" ${mysqlSelected}>MySQL</option>
+            </select>
+        `;
+    }
+    
+    // 默认输入框
+    return `
+        <input 
+            type="text" 
+            id="item_${index}"
+            placeholder="输入新值"
+            value="${currentValue}"
+            oninput="checkItemModification(${index})"
+        >
+    `;
+}
+
+// 处理数据库类型变化联动
+function handleDatabaseTypeChange(index) {
+    
+    if (!currentTemplate || !currentTemplate.items) {
+        showError('联动失败：模板或配置项不存在');
+        return;
+    }
+    
+    const item = currentTemplate.items[index];
+    if (!item || item.name !== '数据库类型') {
+        showError('联动失败：配置项不是数据库类型，当前配置项：' + (item ? item.name : '未找到'));
+        return;
+    }
+    
+    const select = document.getElementById(`item_${index}`);
+    if (!select) {
+        showError('联动失败：找不到下拉框元素');
+        return;
+    }
+    
+    const selectedValue = select.value;
+    
+    // 根据数据库类型确定要设置的值
+    let driverType, driverName, port;
+    if (selectedValue === '0') { // SQL Server
+        driverType = '0';
+        driverName = 'Sql Server';
+        port = '1433';
+    } else if (selectedValue === '9') { // MySQL
+        driverType = '9';
+        driverName = 'MySQL ODBC 8.0 Unicode Driver';
+        port = '3306';
+    } else {
+        showError('联动失败：未知的数据库类型值: ' + selectedValue);
+        return;
+    }
+    
+    // 查找并更新相关配置项
+    let updatedCount = 0;
+    let updateDetails = [];
+    let debugInfo = [];
+    
+    debugInfo.push('开始循环查找配置项，总共有' + currentTemplate.items.length + '个配置项');
+    
+    for (let i = 0; i < currentTemplate.items.length; i++) {
+        const targetItem = currentTemplate.items[i];
+        const targetInput = document.getElementById(`item_${i}`);
+        
+        debugInfo.push('配置项' + i + '：' + targetItem.name + (targetInput ? ' (有输入框)' : ' (无输入框)'));
+        
+        if (targetInput && i !== index) {
+            try {
+                if (targetItem.name === '数据库驱动类型') {
+                    debugInfo.push('→ 开始更新数据库驱动类型：' + driverType);
+                    targetInput.value = driverType;
+                    targetItem.currentValue = driverType;
+                    checkItemModification(i);
+                    updatedCount++;
+                    updateDetails.push('驱动类型=' + driverType);
+                } else if (targetItem.name === '数据库驱动名') {
+                    debugInfo.push('→ 开始更新数据库驱动名：' + driverName);
+                    targetInput.value = driverName;
+                    targetItem.currentValue = driverName;
+                    checkItemModification(i);
+                    updatedCount++;
+                    updateDetails.push('驱动名=' + driverName);
+                } else if (targetItem.name === '数据库端口') {
+                    debugInfo.push('→ 开始更新数据库端口：' + port);
+                    targetInput.value = port;
+                    targetItem.currentValue = port;
+                    checkItemModification(i);
+                    updatedCount++;
+                    updateDetails.push('端口=' + port);
+                } else {
+                    debugInfo.push('○ 配置项不匹配联动规则');
+                }
+            } catch (error) {
+                debugInfo.push('❌ 更新配置项时出错：' + error.message);
+                showError('更新配置项' + targetItem.name + '时出错：' + error.message);
+            }
+        } else if (i === index) {
+            debugInfo.push('○ 当前选择的配置项，跳过');
+        } else {
+            debugInfo.push('○ 没有找到对应的输入框');
+        }
+    }
+    
+    // 更新当前数据库类型配置项的currentValue
+    item.currentValue = selectedValue;
+    
+    // 更新skeleton文件以保持同步
+    updateSkeletonFile(selectedValue, driverType, driverName, port);
+    
+    const dbName = selectedValue === '0' ? 'SQL Server' : 'MySQL';
+}
+
+// 更新skeleton文件以保持同步
+async function updateSkeletonFile(dbType, driverType, driverName, port) {
+    try {
+        // 构造更新skeleton文件的请求
+        const updateData = {
+            templateId: 'kmvue-skeleton-template',
+            updates: [
+                { itemName: '数据库类型', defaultValue: dbType, currentValue: dbType },
+                { itemName: '数据库驱动类型', defaultValue: driverType, currentValue: driverType },
+                { itemName: '数据库驱动名', defaultValue: driverName, currentValue: driverName },
+                { itemName: '数据库端口', defaultValue: port, currentValue: port }
+            ]
+        };
+        
+        // 通过JavaScript Bridge调用后端方法
+        const resultJSON = await window.javaApp.updateSkeleton(JSON.stringify(updateData));
+        const result = JSON.parse(resultJSON);
+        
+        if (result.success) {
+            console.log('Skeleton文件更新成功:', result.data);
+        } else {
+            console.log('Skeleton文件更新失败:', result.error);
+        }
+        
+    } catch (error) {
+        console.log('Skeleton文件更新异常:', error);
+    }
 }
 
 // 检查配置项修改状态
@@ -2223,7 +2803,12 @@ function checkItemModification(index) {
     const isModified = newValue !== currentValue;
     
     // 获取配置项容器
-    const configItem = input.closest('.config-item') || input.closest('.config-item-manager');
+    const configItem = input.closest('.config-item-simple') || input.closest('.config-item-manager');
+    
+    if (!configItem) {
+        console.warn('无法找到配置项容器，index:', index, 'input:', input);
+        return;
+    }
     
     if (isModified) {
         // 移除其他状态类
@@ -2408,7 +2993,7 @@ function createTemplate() {
     console.log('createTemplate: 模板编辑器已显示');
 }
 
-// 生成DFM配置模板 - 使用Java Bridge调用
+// 生成配置模板 - 使用Java Bridge调用
 async function generateDfmTemplate() {
     // 防止并发调用
     if (isLoading) {
@@ -2416,12 +3001,16 @@ async function generateDfmTemplate() {
         return;
     }
     
-    console.log('generateDfmTemplate: 开始生成DFM配置模板');
-    
     try {
-        showLoading('正在生成DFM配置模板，请稍候...');
+        // 获取应用类型
+        const appType = window.javaApp.getAppType();
+        const templateType = appType.toUpperCase();
         
-        const resultJSON = await window.javaApp.generateDfmTemplate();
+        console.log(`generateDfmTemplate: 开始生成${templateType}配置模板`);
+    
+        showLoading(`正在生成${templateType}配置模板，请稍候...`);
+        
+        const resultJSON = await window.javaApp.generateTemplate();
         const result = JSON.parse(resultJSON);
         
         if (result.success) {
@@ -2433,15 +3022,15 @@ async function generateDfmTemplate() {
             // 重新渲染模板列表
             renderTemplateList();
             
-            showSuccess(`DFM配置模板生成成功！模板名称：${generatedTemplate.name}`);
+            showSuccess(`${templateType}配置模板生成成功！模板名称：${generatedTemplate.name}`);
             console.log('generateDfmTemplate: 生成成功', generatedTemplate);
         } else {
-            showError('生成DFM配置模板失败: ' + result.message);
+            showError(`生成${templateType}配置模板失败: ` + result.message);
             console.error('generateDfmTemplate: 生成失败', result.message);
         }
     } catch (error) {
-        console.error('生成DFM配置模板失败:', error);
-        showError('生成DFM配置模板失败: ' + error.message);
+        console.error('生成配置模板失败:', error);
+        showError('生成配置模板失败: ' + error.message);
     } finally {
         hideLoading();
     }
@@ -2912,7 +3501,7 @@ function renderTargetsList() {
         div.innerHTML = `
             <div class="target-file">${target.filePath}</div>
             <div class="target-details">
-                行 ${target.lineNumber} | 前缀: "${target.prefix}" ${target.suffix ? `| 后缀: "${target.suffix}"` : ''}
+${formatTargetDisplay(target, true)}
                 <div style="float: right;">
                     <button class="btn btn-secondary btn-small edit-target-btn" data-index="${index}" style="margin-right: 4px;">编辑</button>
                     <button class="btn btn-danger btn-small delete-target-btn" data-index="${index}">删除</button>
@@ -3336,7 +3925,7 @@ function showApplyResult(applyResult) {
 
 
 
-// 应用修改 - 带前端状态检查
+// 应用修改 - 全部修改模式
 async function applyChanges() {
     // 防止并发调用
     if (isLoading) {
@@ -3344,7 +3933,7 @@ async function applyChanges() {
         return;
     }
     
-    console.log('applyChanges: 开始应用配置修改');
+    console.log('applyChanges: 开始应用配置修改（全部修改模式）');
     
     if (!currentTemplate || !currentTemplate.items) {
         console.log('applyChanges: 没有当前模板或配置项');
@@ -3352,41 +3941,34 @@ async function applyChanges() {
         return;
     }
 
-
-
-    console.log('applyChanges: 收集已修改的配置项');
+    console.log('applyChanges: 收集所有配置项的值');
     const values = {};
-    let hasChanges = false;
     
     currentTemplate.items.forEach((item, index) => {
         const input = document.getElementById(`item_${index}`);
-        if (input && input.value !== '') {
-            // 获取当前值
-            let currentValue = '';
-            if (currentTemplateWithStatus && currentTemplateWithStatus.itemStatuses) {
-                const status = currentTemplateWithStatus.itemStatuses[item.name];
-                if (status && status.currentValue) {
-                    currentValue = status.currentValue;
+        if (input) {
+            const value = input.value.trim();
+            values[item.name] = value;
+            console.log(`applyChanges: 收集配置项 "${item.name}" = "${value}"`);
+        } else {
+            // 对于隐藏的数据库驱动类型，根据数据库类型自动设置
+            if (item.name === '数据库驱动类型') {
+                const dbTypeValue = values['数据库类型'];
+                if (dbTypeValue === '0') {
+                    values[item.name] = '0'; // SQL Server
+                } else if (dbTypeValue === '9') {
+                    values[item.name] = '9'; // MySQL
+                } else {
+                    values[item.name] = item.currentValue || '0';
                 }
-            }
-            
-            // 比较输入值和当前值
-            const newValue = input.value.trim();
-            if (newValue !== currentValue) {
-                values[item.name] = newValue;
-                hasChanges = true;
-                console.log(`applyChanges: 配置项有变化 "${item.name}": "${currentValue}" -> "${newValue}"`);
+                console.log(`applyChanges: 隐藏配置项 "${item.name}" 自动设置为 "${values[item.name]}"`);
             } else {
-                console.log(`applyChanges: 配置项无变化 "${item.name}": "${newValue}"`);
+                // 如果没有找到输入框，使用currentValue或空字符串
+                values[item.name] = item.currentValue || '';
+                console.log(`applyChanges: 配置项 "${item.name}" 没有输入框，使用值 "${values[item.name]}"`);
             }
         }
     });
-
-    if (!hasChanges) {
-        console.log('applyChanges: 没有需要修改的配置项（所有值都与当前值相同）');
-        showSuccess('所有配置项的值都没有变化，无需修改');
-        return;
-    }
 
     const request = {
         templateId: currentTemplate.id,
@@ -3396,7 +3978,7 @@ async function applyChanges() {
     try {
         showLoading('应用配置中...');
         
-        console.log('applyChanges: 调用Java后端应用配置');
+        console.log('applyChanges: 调用Java后端应用配置（全部修改模式）');
         const resultJSON = await window.javaApp.applyChanges(JSON.stringify(request));
         const result = JSON.parse(resultJSON);
         
@@ -3406,12 +3988,22 @@ async function applyChanges() {
             const applyResult = result.data;
             console.log(`applyChanges: 配置应用完成 - ${applyResult.summary}`);
             
-            // 显示详细结果
-            showApplyResult(applyResult);
-            
-            // 如果全部成功，重新加载模板状态
+            // 简化提示：只显示成功消息，详细信息已记录在日志中
             if (applyResult.allSuccess) {
+                let message = '配置修改成功！';
+                if (applyResult.nacosResults && applyResult.nacosResults.length > 0) {
+                    message += ' Nacos同步：' + applyResult.nacosResults.join(', ');
+                }
+                showSuccess(message);
                 console.log('applyChanges: 重新加载模板状态');
+                selectTemplate(currentTemplate.id);
+            } else {
+                let message = `配置修改完成！成功 ${applyResult.successCount} 个，失败 ${applyResult.failureCount} 个，详细信息请查看日志`;
+                if (applyResult.nacosResults && applyResult.nacosResults.length > 0) {
+                    message += ' Nacos同步：' + applyResult.nacosResults.join(', ');
+                }
+                showWarning(message);
+                // 仍然重新加载模板状态
                 selectTemplate(currentTemplate.id);
             }
         } else {
@@ -3422,7 +4014,173 @@ async function applyChanges() {
         console.log(`applyChanges: 错误 - ${error.message}`);
         console.error('应用配置失败:', error);
         hideLoading();
-        showError('应用失败: ' + error.message);
+        showError('配置修改失败，详细信息请查看日志');
+    }
+}
+
+// ==================== 数据库连接测试功能 ====================
+
+// 转换数据库错误信息为用户友好的提示
+function getFriendlyDatabaseError(errorMessage) {
+    if (!errorMessage) return '连接失败，请检查数据库配置';
+    
+    const error = errorMessage.toLowerCase();
+    
+    // SQL Server 错误
+    if (error.includes('login failed')) {
+        return '用户名或密码错误，请检查数据库登录凭据';
+    }
+    if (error.includes('cannot open database')) {
+        return '无法打开指定的数据库，请检查数据库名称是否正确';
+    }
+    if (error.includes('connection refused') || error.includes('connection failed')) {
+        return '无法连接到数据库服务器，请检查服务器地址和端口号';
+    }
+    if (error.includes('timeout')) {
+        return '连接超时，请检查网络连接或数据库服务器状态';
+    }
+    
+    // MySQL 错误
+    if (error.includes('access denied')) {
+        return '访问被拒绝，请检查用户名、密码或权限设置';
+    }
+    if (error.includes('unknown database')) {
+        return '指定的数据库不存在，请检查数据库名称';
+    }
+    if (error.includes('unknown host')) {
+        return '无法解析主机名，请检查数据库服务器地址';
+    }
+    
+    // 驱动程序错误
+    if (error.includes('no suitable driver') || error.includes('driver')) {
+        return '数据库驱动程序未找到，请联系系统管理员';
+    }
+    
+    // 通用网络错误
+    if (error.includes('connection reset')) {
+        return '网络连接被重置，请检查网络连接';
+    }
+    
+    // 如果没有匹配的错误类型，返回简化的原始信息
+    if (errorMessage.length > 100) {
+        return '连接失败，请检查数据库配置信息';
+    }
+    
+    return errorMessage;
+}
+
+// 显示数据库测试状态 - 简化版本
+function showDatabaseTestLoading() {
+    // 找到所有测试数据库连接按钮
+    const buttons = document.querySelectorAll('button[onclick="testDatabaseConnection()"]');
+    buttons.forEach(button => {
+        button.disabled = true;
+        button.textContent = '正在测试...';
+    });
+}
+
+// 恢复数据库测试按钮状态 - 简化版本
+function hideDatabaseTestLoading() {
+    // 找到所有测试数据库连接按钮
+    const buttons = document.querySelectorAll('button[onclick="testDatabaseConnection()"]');
+    buttons.forEach(button => {
+        button.disabled = false;
+        button.textContent = '测试数据库连接';
+    });
+}
+
+// 测试数据库连接
+async function testDatabaseConnection() {
+    try {
+        console.log('testDatabaseConnection: 开始测试数据库连接');
+        
+        // 检查是否有当前模板
+        if (!currentTemplate || !currentTemplate.items) {
+            showError('没有可用的配置项');
+            return;
+        }
+
+        // 收集所有配置项的值
+        const configValues = {};
+        
+        currentTemplate.items.forEach((item, index) => {
+            const input = document.getElementById(`item_${index}`);
+            if (input) {
+                const value = input.value.trim();
+                configValues[item.name] = value;
+            } else {
+                // 对于隐藏的数据库驱动类型，使用currentValue或根据数据库类型推算
+                if (item.name === '数据库驱动类型') {
+                    const dbTypeValue = configValues['数据库类型'];
+                    if (dbTypeValue === '0') {
+                        configValues[item.name] = '0'; // SQL Server
+                    } else if (dbTypeValue === '9') {
+                        configValues[item.name] = '9'; // MySQL
+                    } else {
+                        configValues[item.name] = item.currentValue || '0';
+                    }
+                } else {
+                    // 如果没有找到输入框，使用currentValue或空字符串
+                    configValues[item.name] = item.currentValue || '';
+                }
+            }
+        });
+        
+        // 构造请求数据
+        const request = {
+            templateId: currentTemplate.id,
+            values: configValues
+        };
+        
+        console.log('testDatabaseConnection: 请求数据', request);
+        
+        // 显示转圈动画
+        showDatabaseTestLoading();
+        
+        // 调用后端测试数据库连接
+        const resultJSON = await window.javaApp.testDatabaseConnection(JSON.stringify(request));
+        console.log('testDatabaseConnection: 后端响应', resultJSON);
+        
+        const response = JSON.parse(resultJSON);
+        
+        // 恢复按钮状态
+        hideDatabaseTestLoading();
+        
+        if (response.success) {
+            const result = response.data;
+            if (result.success) {
+                showSuccess('数据库连接测试成功: ' + result.message);
+            } else {
+                // 显示用户友好的数据库连接错误信息
+                const errorMessage = result.message || '数据库连接失败';
+                const friendlyMessage = getFriendlyDatabaseError(errorMessage);
+                showError('数据库连接测试失败: ' + friendlyMessage);
+            }
+        } else {
+            // 显示后端返回的错误信息
+            const errorMessage = response.message || '未知错误';
+            const friendlyMessage = getFriendlyDatabaseError(errorMessage);
+            showError('数据库连接测试失败: ' + friendlyMessage);
+        }
+        
+    } catch (error) {
+        console.error('数据库连接测试异常:', error);
+        
+        // 恢复按钮状态
+        hideDatabaseTestLoading();
+        
+        // 显示用户友好的错误信息
+        let originalError = '';
+        if (error.message) {
+            originalError = error.message;
+        } else if (typeof error === 'string') {
+            originalError = error;
+        } else {
+            originalError = '连接异常，请检查配置';
+        }
+        
+        const friendlyMessage = getFriendlyDatabaseError(originalError);
+        showError('数据库连接测试失败: ' + friendlyMessage);
     }
 }
 
@@ -3773,6 +4531,47 @@ async function saveTemplateInline() {
     }
 }
 
+// 检查Nacos服务状态
+async function checkNacosStatus() {
+    try {
+        const resultJSON = await window.javaApp.checkNacosStatus();
+        const result = JSON.parse(resultJSON);
+        
+        if (result.success) {
+            const status = result.data;
+            console.log('Nacos状态:', status);
+            
+            let message = `Nacos服务状态：${status.enabled ? '已启用' : '未启用'}`;
+            if (status.enabled) {
+                message += `，连接状态：${status.available ? '正常' : '不可用'}`;
+                message += `，服务地址：${status.url}`;
+            }
+            
+            if (status.enabled && status.available) {
+                showSuccess(message);
+            } else if (status.enabled && !status.available) {
+                showWarning(message + ' - 请检查Nacos服务是否正在运行');
+            } else {
+                showInfo(message);
+            }
+            
+            return status;
+        } else {
+            throw new Error(result.error || '检查失败');
+        }
+    } catch (error) {
+        console.error('检查Nacos状态失败:', error);
+        showError('检查Nacos状态失败: ' + error.message);
+        return null;
+    }
+}
+
+// 页面加载时检查Nacos状态
+document.addEventListener('DOMContentLoaded', function() {
+    // 延迟检查Nacos状态，确保Java Bridge已初始化
+    setTimeout(checkNacosStatus, 2000);
+});
+
 
     </script>
 
@@ -3796,6 +4595,8 @@ async function saveTemplateInline() {
     <!-- 右键菜单 -->
     <div id="contextMenu" class="context-menu">
         <button class="context-menu-item" onclick="refreshConfigData()">刷新配置数据</button>
+        <button class="context-menu-item" onclick="contextMenuApplyChanges()" id="contextApplyBtn">一键应用配置</button>
+        <button class="context-menu-item" onclick="contextMenuCheckNacosStatus()">检查Nacos状态</button>
     </div>
 
 </body>

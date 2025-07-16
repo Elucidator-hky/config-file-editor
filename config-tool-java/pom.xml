@@ -54,6 +54,20 @@
             <artifactId>juniversalchardet</artifactId>
             <version>2.4.0</version>
         </dependency>
+
+        <!-- SQL Server JDBC驱动 -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>12.2.0.jre8</version>
+        </dependency>
+
+        <!-- MySQL JDBC驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -77,7 +91,39 @@
                 <version>3.1.0</version>
                 <configuration>
                     <mainClass>com.configtool.App</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>file.encoding</key>
+                            <value>UTF-8</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>run-kmvue</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>com.configtool.App</mainClass>
+                            <arguments>
+                                <argument>kmvue</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-dfm</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>com.configtool.App</mainClass>
+                            <arguments>
+                                <argument>dfm</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- 资源复制插件 -->

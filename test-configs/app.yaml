@@ -28,7 +28,7 @@ database:
 host:127.0.0.1
     port: 5432
     namedfadfasdfadsfasdfasdf
-    username: "usersdasdassadfasdfdsdsdasdfadsf"
+    username: "D:\KMVue\mysql-8.0.22---user"
     password: "pg_secure_password"
     ssl_mode: "require"
     max_connections: 25
@@ -63,7 +63,7 @@ message_queue:
   provider: "rabbitmq"
   host: "rabbitmq.cluster.local"
   port: 5672
-  username: "queue_user"
+  username: "D:\KMVue\mysql-8.0.22---user"
   password: "rabbit_password"
   vhost: "/app"
 

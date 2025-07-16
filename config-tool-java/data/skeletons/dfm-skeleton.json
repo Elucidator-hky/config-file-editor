@@ -5,9 +5,137 @@
   "items": [
     {
       "id": null,
+      "name": "数据库类型",
+      "description": "选择数据库类型，支持SQL Server和MySQL",
+      "defaultValue": "0",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 2,
+          "prefix": "db_type\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "0"
+    },
+    {
+      "id": null,
+      "name": "数据库驱动类型",
+      "description": "数据库驱动类型编号",
+      "defaultValue": "0",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 3,
+          "prefix": "driver_type\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "0"
+    },
+    {
+      "id": null,
+      "name": "数据库驱动名",
+      "description": "数据库驱动程序名称",
+      "defaultValue": "Sql Server",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 4,
+          "prefix": "driver_name\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "Sql Server"
+    },
+    {
+      "id": null,
+      "name": "数据库端口",
+      "description": "数据库服务端口号",
+      "defaultValue": "1433",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 5,
+          "prefix": "db_port\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "1433"
+    },
+    {
+      "id": null,
+      "name": "数据库服务器地址",
+      "description": "数据库服务器IP地址",
+      "defaultValue": "127.0.0.1",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 6,
+          "prefix": "db_host\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "127.0.0.1"
+    },
+    {
+      "id": null,
+      "name": "数据库用户名",
+      "description": "数据库登录用户名",
+      "defaultValue": "root",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 7,
+          "prefix": "db_username\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "root"
+    },
+    {
+      "id": null,
+      "name": "数据库密码",
+      "description": "数据库登录密码",
+      "defaultValue": "sasa",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 8,
+          "prefix": "db_password\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "sasa"
+    },
+    {
+      "id": null,
+      "name": "数据库名称",
+      "description": "数据库名称",
+      "defaultValue": "kmview",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 9,
+          "prefix": "db_name\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "kmview"
+    },
+    {
+      "id": null,
       "name": "MYSQL数据库IP",
       "description": "",
-      "defaultValue": null,
+      "defaultValue": "{{RELATIVE}}\\test-configs\\application.ini",
       "targets": [
         {
           "id": null,
@@ -58,7 +186,7 @@
       "id": null,
       "name": "数据库名称",
       "description": "",
-      "defaultValue": null,
+      "defaultValue": "kmview",
       "targets": [
         {
           "id": null,
@@ -109,7 +237,7 @@
       "id": null,
       "name": "数据库用户名",
       "description": "",
-      "defaultValue": null,
+      "defaultValue": "{{ENV:mysql}}---user",
       "targets": [
         {
           "id": null,
@@ -122,10 +250,10 @@
       "currentValue": "useriiii"
     },
     {
-      "id": null,
+      "id": "pass_config",
       "name": "数据库密码",
       "description": "",
-      "defaultValue": null,
+      "defaultValue": "{{RELATIVE}}---sasa",
       "targets": [
         {
           "id": null,
@@ -150,6 +278,39 @@
         }
       ],
       "currentValue": "password123"
+    },
+    {
+      "id": "item_1751856236839_mrxd14gya",
+      "name": "服务器IP",
+      "description": "",
+      "defaultValue": "192.168.1.44",
+      "targets": [
+        {
+          "id": null,
+          "filePath": "D:\\KMVue\\nginx-1.24.0\\conf\\nginx.conf",
+          "lineNumber": 21,
+          "prefix": "        server_name  ",
+          "suffix": ";"
+        }
+      ],
+      "currentValue": "",
+      "status": "ERROR"
+    },
+    {
+      "id": null,
+      "name": "DFM安装路径",
+      "description": "DFM系统的安装目录路径",
+      "defaultValue": "D:\\DFM",
+      "targets": [
+        {
+          "id": "convertPath",
+          "filePath": "{{RELATIVE}}\\test-configs\\application.ini",
+          "lineNumber": 3,
+          "prefix": "dfm_home\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "D:\\DFM"
     }
   ]
 } 

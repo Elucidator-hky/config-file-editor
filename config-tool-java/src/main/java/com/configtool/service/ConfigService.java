@@ -5,8 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 配置应用服务
@@ -17,10 +16,18 @@ public class ConfigService {
     
     private final TemplateService templateService;
     private final FileProcessor fileProcessor;
+    private final NacosApiService nacosApiService;
+    private final String appType; // 添加应用类型字段
 
     public ConfigService() {
+        this("dfm"); // 默认为dfm
+    }
+    
+    public ConfigService(String appType) {
         this.templateService = new TemplateService();
         this.fileProcessor = new FileProcessor();
+        this.nacosApiService = new NacosApiService();
+        this.appType = appType != null ? appType.toLowerCase() : "dfm";
     }
 
     /**
@@ -302,6 +309,11 @@ public class ConfigService {
         logger.info("配置更改应用完成：总计 {} 个目标，{} 个成功，{} 个失败", 
                 result.getTotalTargets(), result.getSuccessCount(), result.getFailureCount());
         
+        // 检查并同步数据库配置到Nacos
+        if (result.getSuccessCount() > 0) {
+            syncDatabaseConfigToNacos(values, result);
+        }
+        
         return result;
     }
 
@@ -364,5 +376,219 @@ public class ConfigService {
                 .filter(item -> itemName.equals(item.getName()))
                 .findFirst()
                 .orElse(null);
+    }
+    
+    /**
+     * 同步数据库配置到Nacos
+     */
+    private void syncDatabaseConfigToNacos(Map<String, String> values, ApplyResult result) {
+        if (!nacosApiService.isEnabled()) {
+            logger.debug("Nacos未启用，跳过配置同步");
+            return;
+        }
+        
+        try {
+            logger.info("开始同步数据库配置到Nacos");
+            
+            // 检查是否有数据库相关配置项的变化
+            Map<String, String> databaseChanges = extractDatabaseChanges(values);
+            
+            if (databaseChanges.isEmpty()) {
+                logger.debug("没有数据库配置项变化，跳过Nacos同步");
+                return;
+            }
+            
+            logger.info("检测到数据库配置变化: {}", databaseChanges.keySet());
+            
+            // 检查Nacos服务是否可用
+            if (!nacosApiService.isNacosAvailable()) {
+                logger.warn("Nacos服务不可用，跳过配置同步");
+                return;
+            }
+            
+            // 根据项目类型决定同步目标，而不是数据库类型
+            logger.info("当前项目类型: {}", appType);
+            if ("kmvue".equals(appType)) {
+                // KMVue项目 - 同步到kmvue-commonConfig.yml
+                syncToKmvueConfig(databaseChanges, result);
+            } else {
+                // DFM项目 - 同步到dfmcloud-commonConfig.yml
+                syncToDfmcloudConfig(databaseChanges, result);
+            }
+            
+            logger.info("数据库配置同步到Nacos完成");
+            
+        } catch (Exception e) {
+            logger.error("同步数据库配置到Nacos失败", e);
+            // 不影响主流程，只记录错误
+        }
+    }
+    
+    /**
+     * 提取数据库相关配置项的变化
+     */
+    private Map<String, String> extractDatabaseChanges(Map<String, String> values) {
+        Map<String, String> databaseChanges = new HashMap<>();
+        
+        // 定义数据库相关配置项名称
+        String[] databaseItemNames = {
+            "数据库服务器地址", "数据库用户名", "数据库密码", "数据库类型", "数据库驱动类型", "数据库端口", "数据库名称"
+        };
+        
+        for (String itemName : databaseItemNames) {
+            if (values.containsKey(itemName)) {
+                databaseChanges.put(itemName, values.get(itemName));
+            }
+        }
+        
+        return databaseChanges;
+    }
+    
+    /**
+     * 同步到KMVue项目配置
+     */
+    private void syncToKmvueConfig(Map<String, String> databaseChanges, ApplyResult result) {
+        try {
+            logger.info("开始同步KMVue配置到Nacos");
+            logger.info("数据库配置变化: {}", databaseChanges);
+            
+            // 根据数据库类型构造相应的数据库配置
+            String dbType = databaseChanges.get("数据库类型");
+            String url, username, password, driverClassName;
+            
+            if ("0".equals(dbType)) {
+                // SQL Server配置
+                url = buildSqlServerUrl(databaseChanges);
+                username = databaseChanges.getOrDefault("数据库用户名", "sa");
+                password = databaseChanges.getOrDefault("数据库密码", "");
+                driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+            } else {
+                // MySQL配置（默认）
+                url = buildMysqlUrl(databaseChanges);
+                username = databaseChanges.getOrDefault("数据库用户名", "root");
+                password = databaseChanges.getOrDefault("数据库密码", "");
+                driverClassName = "com.mysql.cj.jdbc.Driver";
+            }
+            
+            logger.info("构造的数据库配置 - URL: {}, Username: {}, Password: [隐藏], Driver: {}", 
+                url, username, driverClassName);
+            
+            // 同步到Nacos
+            boolean success = nacosApiService.updateDatabaseConfig(
+                "kmvue-commonConfig.yml", 
+                "DEFAULT_GROUP", 
+                url, 
+                username, 
+                password, 
+                driverClassName
+            );
+            
+            if (success) {
+                logger.info("KMVue数据库配置同步到Nacos成功");
+                result.addNacosResult("KMVue配置同步成功");
+            } else {
+                logger.warn("KMVue数据库配置同步到Nacos失败");
+                result.addNacosResult("KMVue配置同步失败");
+            }
+            
+        } catch (Exception e) {
+            logger.error("同步KMVue配置到Nacos失败", e);
+            result.addNacosResult("KMVue配置同步异常: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 同步到DFMCloud项目配置
+     */
+    private void syncToDfmcloudConfig(Map<String, String> databaseChanges, ApplyResult result) {
+        try {
+            logger.info("开始同步DFMCloud配置到Nacos");
+            logger.info("数据库配置变化: {}", databaseChanges);
+            
+            // 根据数据库类型构造相应的数据库配置
+            String dbType = databaseChanges.get("数据库类型");
+            String url, username, password, driverClassName;
+            
+            if ("9".equals(dbType)) {
+                // MySQL配置
+                url = buildMysqlUrl(databaseChanges);
+                username = databaseChanges.getOrDefault("数据库用户名", "root");
+                password = databaseChanges.getOrDefault("数据库密码", "");
+                driverClassName = "com.mysql.cj.jdbc.Driver";
+            } else {
+                // SQL Server配置（默认）
+                url = buildSqlServerUrl(databaseChanges);
+                username = databaseChanges.getOrDefault("数据库用户名", "sa");
+                password = databaseChanges.getOrDefault("数据库密码", "");
+                driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+            }
+            
+            logger.info("构造的数据库配置 - URL: {}, Username: {}, Password: [隐藏], Driver: {}", 
+                url, username, driverClassName);
+            
+            // 同步到Nacos
+            boolean success = nacosApiService.updateDatabaseConfig(
+                "dfmcloud-commonConfig.yml", 
+                "DEFAULT_GROUP", 
+                url, 
+                username, 
+                password, 
+                driverClassName
+            );
+            
+            if (success) {
+                logger.info("DFMCloud数据库配置同步到Nacos成功");
+                result.addNacosResult("DFMCloud配置同步成功");
+            } else {
+                logger.warn("DFMCloud数据库配置同步到Nacos失败");
+                result.addNacosResult("DFMCloud配置同步失败");
+            }
+            
+        } catch (Exception e) {
+            logger.error("同步DFMCloud配置到Nacos失败", e);
+            result.addNacosResult("DFMCloud配置同步异常: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 构造MySQL数据库URL
+     */
+    private String buildMysqlUrl(Map<String, String> databaseChanges) {
+        String address = databaseChanges.get("数据库服务器地址");
+        String port = databaseChanges.getOrDefault("数据库端口", "3306");
+        String databaseName = databaseChanges.get("数据库名称");
+        
+        if (address == null || address.trim().isEmpty()) {
+            address = "localhost";
+        }
+        
+        // 如果没有指定数据库名称，使用默认值
+        if (databaseName == null || databaseName.trim().isEmpty()) {
+            databaseName = "kmview";
+        }
+        
+        return String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=utf-8&generateSimpleParameterMetadata=true&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%%2B8", 
+            address, port, databaseName);
+    }
+    
+    /**
+     * 构造SQL Server数据库URL
+     */
+    private String buildSqlServerUrl(Map<String, String> databaseChanges) {
+        String address = databaseChanges.get("数据库服务器地址");
+        String port = databaseChanges.getOrDefault("数据库端口", "1433");
+        String databaseName = databaseChanges.get("数据库名称");
+        
+        if (address == null || address.trim().isEmpty()) {
+            address = "localhost";
+        }
+        
+        // 如果没有指定数据库名称，使用默认值
+        if (databaseName == null || databaseName.trim().isEmpty()) {
+            databaseName = "3DDFM_ESJ";
+        }
+        
+        return String.format("jdbc:sqlserver://%s:%s;DatabaseName=%s", 
+            address, port, databaseName);
     }
 } 

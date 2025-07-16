@@ -24,17 +24,17 @@
     <!-- 数据库配置 -->
     <database>
         <primary type="mysql">
-            <host>127.0.0.6jkjksadfasdfasdfas</host>
-            <port>3306</port>
-            <schema>sdfadfasfaadsf</schema>
+            <host>E:\code\editPath\test-configs\application.ini</host>
+            <port>1433</port>
+            <schema>kmview</schema>
             <username>dbadmin</username>
-            <password>17116194217138197189187146108119129196119168122237113242361</password>
+            <password>15244253153243200255270257125243266104238136198133104174264257122237142242361</password>
             <pool_size>20</pool_size>
         </primary>
         <cache type="redis">
-            <host>redis.internal.com</host>
-            <port>6379</port>
-            <password>redis_secret</password>
+            <host>E:\code\editPath\test-configs\application.ini</host>
+            <port>1433</port>
+            <password>E:\code\editPath\---sasa</password>
             <ttl>7200</ttl>
         </cache>
     </database>

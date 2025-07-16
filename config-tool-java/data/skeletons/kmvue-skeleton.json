@@ -1,0 +1,143 @@
+{
+  "id": "kmvue-skeleton-template",
+  "name": "KMVUE数据库配置测试模板",
+  "description": "用于测试数据库类型下拉框联动功能的简化模板",
+  "items": [
+    {
+      "id": "ad3531de-07c8-438e-b531-de07c8738e83",
+      "name": "数据库类型",
+      "description": "选择数据库类型，支持SQL Server和MySQL",
+      "defaultValue": "9",
+      "targets": [
+        {
+          "id": "6d91aace-00a5-41ff-91aa-ce00a591ff0d",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 2,
+          "prefix": "db_type\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "9",
+      "status": null
+    },
+    {
+      "id": "e1f55613-51cc-408a-b556-1351cc408a13",
+      "name": "数据库驱动类型",
+      "description": "数据库驱动类型编号",
+      "defaultValue": "9",
+      "targets": [
+        {
+          "id": "3c45acff-045f-4630-85ac-ff045fb6304c",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 3,
+          "prefix": "driver_type\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "9",
+      "status": null
+    },
+    {
+      "id": "bc3f92ef-0835-47d9-bf92-ef0835c7d9e7",
+      "name": "数据库驱动名",
+      "description": "数据库驱动程序名称",
+      "defaultValue": "MySQL ODBC 8.0 Unicode Driver",
+      "targets": [
+        {
+          "id": "f8c1a84d-0630-4ad0-81a8-4d06308ad011",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 4,
+          "prefix": "driver_name\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "MySQL ODBC 8.0 Unicode Driver",
+      "status": null
+    },
+    {
+      "id": "8f69918d-39ed-48c0-a991-8d39eda8c0d0",
+      "name": "数据库端口",
+      "description": "数据库服务端口号",
+      "defaultValue": "3306",
+      "targets": [
+        {
+          "id": "46eec9b8-3e93-4576-aec9-b83e93357699",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 5,
+          "prefix": "db_port\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "3306",
+      "status": null
+    },
+    {
+      "id": "d8468e5e-d7de-494b-868e-5ed7de694bbd",
+      "name": "数据库服务器地址",
+      "description": "数据库服务器IP地址",
+      "defaultValue": "127.0.0.1",
+      "targets": [
+        {
+          "id": "b76af719-8ccc-410e-aaf7-198ccc410e2e",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 6,
+          "prefix": "db_host\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "127.0.0.1",
+      "status": null
+    },
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "数据库用户名",
+      "description": "数据库登录用户名",
+      "defaultValue": "root",
+      "targets": [
+        {
+          "id": "f1e2d3c4-b5a6-7890-fedc-ba1234567890",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 7,
+          "prefix": "db_username\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "root",
+      "status": null
+    },
+    {
+      "id": "z9y8x7w6-v5u4-3210-zyxw-vu9876543210",
+      "name": "数据库密码",
+      "description": "数据库登录密码",
+      "defaultValue": "sasa",
+      "targets": [
+        {
+          "id": "p9o8n7m6-l5k4-3210-ponm-lk9876543210",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 8,
+          "prefix": "db_password\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "sasa",
+      "status": null
+    },
+    {
+      "id": "m1n2o3p4-q5r6-7890-mnop-qr1234567890",
+      "name": "数据库名称",
+      "description": "数据库名称",
+      "defaultValue": "kmview",
+      "targets": [
+        {
+          "id": "h1g2f3e4-d5c6-7890-hgfe-dc1234567890",
+          "filePath": "{{RELATIVE}}\\test-configs\\database.ini",
+          "lineNumber": 9,
+          "prefix": "db_name\u003d",
+          "suffix": ""
+        }
+      ],
+      "currentValue": "kmview",
+      "status": null
+    }
+  ]
+}

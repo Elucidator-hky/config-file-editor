@@ -110,6 +110,11 @@ public class EnvironmentConfig {
     public static final String DFM_SKELETON_TEMPLATE = "dfm-skeleton.json";
     
     /**
+     * KMVUE半成品模板文件名
+     */
+    public static final String KMVUE_SKELETON_TEMPLATE = "kmvue-skeleton.json";
+    
+    /**
      * 相对路径标记前缀
      */
     public static final String RELATIVE_PATH_MARKER = "{{RELATIVE}}";
